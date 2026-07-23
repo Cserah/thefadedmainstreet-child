@@ -1,0 +1,63 @@
+name: Deploy to production
+
+# Auto-deploys the theme to thefadedmainstreet.com whenever main is pushed,
+# using the same bookended WP Pusher flow as deploy.py (activate -> webhook ->
+# verify -> ALWAYS deactivate). Also runnable on demand via "Run workflow".
+#
+# Server: Lightsail, AWS-packaged WordPress blueprint (NOT Bitnami) —
+# SSH user is `admin`, WordPress at /var/www/html.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   LIGHTSAIL_SSH_KEY  the full private key (contents of thefadedmainstreet.pem)
+#   LIGHTSAIL_HOST     admin@3.90.133.227   (kept secret so the Cloudflare
+#                                            origin IP isn't exposed in the repo)
+#
+# A deploy only "takes" when the Version: in style.css changed (the script skips
+# when live already matches), so bump the version on each deployable change.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify deploy secrets are configured
+        id: guard
+        env:
+          KEY: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          HOST: ${{ secrets.LIGHTSAIL_HOST }}
+        run: |
+          if [ -z "$KEY" ] || [ -z "$HOST" ]; then
+            echo "::warning::Deploy secrets not set (LIGHTSAIL_SSH_KEY / LIGHTSAIL_HOST). Skipping. Add them in Settings → Secrets and variables → Actions, then re-run."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up SSH key
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          KEY: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Bookended WP Pusher deploy
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          SSH_TARGET: ${{ secrets.LIGHTSAIL_HOST }}
+          KEY_PATH: /home/runner/.ssh/deploy_key
+          SITE: https://thefadedmainstreet.com
+          THEME: thefadedmainstreet-child
+        run: python3 .github/deploy.py
