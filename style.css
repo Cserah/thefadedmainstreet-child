@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.1.2
+Version:      1.1.3
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -547,6 +547,9 @@ a.fms-still:hover img { transform: scale(1.03); }
   .fms-nav { justify-content: center; gap: 16px; }
   .fms-masthead { letter-spacing: .18em; }
   .fms-hero { height: auto; min-height: 480px; display: flex; align-items: flex-end; }
+  .fms-hero__img { object-position: 50% 35%; }
+  /* Vertical scrim on mobile: the text sits over the bottom of the image. */
+  .fms-hero__grade { background: linear-gradient(180deg, rgba(30,22,14,.10) 30%, rgba(30,22,14,.88) 85%); }
   .fms-hero__text { position: relative; left: 0; bottom: 0; padding: 220px 20px 36px; }
   .fms-hero__title { font-size: 42px; }
   .fms-hero__dek { font-size: 17px; }

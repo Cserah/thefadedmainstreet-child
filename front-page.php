@@ -40,13 +40,17 @@ function fms_post_still( $post_id ) {
 	<?php fms_topbar(); ?>
 
 	<section class="fms-hero">
-		<img class="fms-hero__img"
-			src="<?php echo esc_url( $fms_assets . '/hero-ghost-sign-neutral-21x9.jpg' ); ?>"
-			srcset="<?php echo esc_url( $fms_assets . '/hero-ghost-sign-neutral-960.jpg' ); ?> 960w,
-				<?php echo esc_url( $fms_assets . '/hero-ghost-sign-neutral-21x9.jpg' ); ?> 1920w"
-			sizes="100vw"
-			alt="A faded hand-painted flour advertisement on an aged brick wall at golden hour"
-			width="1920" height="815" fetchpriority="high" decoding="async" />
+		<picture>
+			<!-- Text-free portrait shot on small screens so the ghost-sign
+			     lettering never fights the headline. -->
+			<source media="(max-width: 800px)"
+				srcset="<?php echo esc_url( $fms_assets . '/hero-mobile-4x5.jpg' ); ?>" />
+			<source srcset="<?php echo esc_url( $fms_assets . '/hero-ghost-sign-neutral-21x9.jpg' ); ?>" />
+			<img class="fms-hero__img"
+				src="<?php echo esc_url( $fms_assets . '/hero-ghost-sign-neutral-21x9.jpg' ); ?>"
+				alt="A small-town main street of aged brick at golden hour"
+				width="1920" height="815" fetchpriority="high" decoding="async" />
+		</picture>
 		<div class="fms-hero__grade" aria-hidden="true"></div>
 		<div class="fms-hero__tint" aria-hidden="true"></div>
 		<div class="fms-hero__text">
