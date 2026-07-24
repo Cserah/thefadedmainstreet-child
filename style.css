@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.2.0
+Version:      1.2.1
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -492,23 +492,24 @@ a.fms-still:hover img { transform: scale(1.03); }
 /* ---------------------------------------------------------------------------
    Article pages (single + about), restyled to the Broadsheet tokens
 --------------------------------------------------------------------------- */
+/* Full-bleed paper band; the text inside lines up with the 720px body column. */
 .fms-article-hero {
   background: var(--fms-paper-mid);
   color: var(--fms-ink);
   padding: 48px 24px 4px;
   text-align: left;
-  max-width: 768px;
-  margin: 0 auto;
 }
-.fms-article-hero .fms-eyebrow { color: var(--fms-brick); }
+.fms-article-hero .fms-eyebrow { color: var(--fms-brick); max-width: 720px; margin: 0 auto 8px; }
 .fms-article-hero h1 {
   color: var(--fms-ink);
   font-size: clamp(30px, 4.5vw, 46px);
   line-height: 1.1;
-  margin: 0 0 10px;
+  max-width: 720px;
+  margin: 0 auto 10px;
 }
 .fms-article-hero .fms-article-meta {
-  font-style: italic; color: var(--fms-sepia); font-size: 15px; margin: 0;
+  font-style: italic; color: var(--fms-sepia); font-size: 15px;
+  max-width: 720px; margin: 0 auto;
 }
 .fms-article-video {
   max-width: 900px;
@@ -522,8 +523,14 @@ a.fms-still:hover img { transform: scale(1.03); }
 .fms-article-video + .fms-article-body { padding-top: 96px; }
 .fms-article-body .fms-wrap--narrow { max-width: 720px; margin: 0 auto; }
 .fms-article-body p { font-size: 18px; line-height: 1.7; margin: 0 0 24px; }
-.fms-article-body h2 { font-size: 30px; margin: 40px 0 16px; }
-.fms-article-body h3 { font-size: 23px; margin: 32px 0 12px; }
+/* Blocksy prints its own `h2 {}` / `a {}` rules inline in wp_head, after this
+   stylesheet — so post copy needs a class-scoped selector to win the cascade,
+   otherwise headings and links fall back to Blocksy's navy/blue. */
+.fms-article-body h2 { font-size: 30px; margin: 40px 0 16px; color: var(--fms-ink); }
+.fms-article-body h3 { font-size: 23px; margin: 32px 0 12px; color: var(--fms-ink); }
+.fms-article-body h4 { color: var(--fms-ink); }
+.fms-article-body a { color: var(--fms-brick); }
+.fms-article-body a:hover { color: var(--fms-brick-hover); }
 .fms-article-body img { max-width: 100%; height: auto; }
 .fms-article-body blockquote {
   border-left: 3px solid var(--fms-brick);
