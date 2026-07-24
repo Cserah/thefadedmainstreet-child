@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.1.0
+Version:      1.1.1
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -54,7 +54,9 @@ a:hover { color: var(--fms-brick-hover); }
 /* Blocksy's own header/footer are replaced by the template's top bar and
    footer on the homepage only. */
 body.home header#header, body.home .ct-header,
-body.home footer.ct-footer, body.home #footer { display: none; }
+body.home footer.ct-footer, body.home #footer,
+body.page-template-page-about header#header, body.page-template-page-about .ct-header,
+body.page-template-page-about footer.ct-footer, body.page-template-page-about #footer { display: none; }
 
 /* ---------------------------------------------------------------------------
    Shared band furniture
@@ -155,7 +157,14 @@ body.home footer.ct-footer, body.home #footer { display: none; }
   text-decoration: none;
 }
 .fms-nav a:hover { color: var(--fms-brick-hover); }
-.fms-nav .fms-btn { padding: 10px 16px; font-size: 12px; }
+/* Beat .fms-nav a's specificity so the button keeps cream-on-brick text. */
+.fms-nav a.fms-btn {
+  padding: 10px 16px;
+  font-size: 12px;
+  color: var(--fms-paper);
+  background: var(--fms-brick);
+}
+.fms-nav a.fms-btn:hover { background: var(--fms-brick-deep); color: var(--fms-paper); }
 
 /* ---------------------------------------------------------------------------
    2. Masthead rule

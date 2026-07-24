@@ -105,6 +105,76 @@ add_action( 'wp_footer', function () {
 	<?php
 } );
 
+/* ---------------------------------------------------------------------------
+   Shared Broadsheet bands (top bar / masthead / footer), used by the
+   homepage and About templates.
+--------------------------------------------------------------------------- */
+define( 'FMS_CHANNEL_URL', 'https://www.youtube.com/@thefadedmainstreet' );
+
+function fms_topbar() {
+	?>
+	<div class="fms-topbar">
+		<div class="fms-topbar__in">
+			<a class="fms-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<span class="fms-logo__stamp" aria-hidden="true">FM</span>
+				<span>
+					<span class="fms-logo__name">Faded Main Street</span>
+					<span class="fms-logo__tag">Stories of Vanished America</span>
+				</span>
+			</a>
+			<nav class="fms-nav" aria-label="<?php esc_attr_e( 'Primary', 'thefadedmainstreet-child' ); ?>">
+				<a href="<?php echo esc_url( home_url( '/#stories' ) ); ?>">Stories</a>
+				<a href="<?php echo esc_url( home_url( '/#themes' ) ); ?>">Themes</a>
+				<a href="<?php echo esc_url( home_url( '/#map' ) ); ?>">The Map</a>
+				<a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+				<a class="fms-btn" href="<?php echo esc_url( FMS_CHANNEL_URL ); ?>">Subscribe &#9656;</a>
+			</nav>
+		</div>
+	</div>
+	<div class="fms-masthead">
+		Vol. I <span class="d">&#9670;</span> Documented before it disappears <span class="d">&#9670;</span> Est. 2026
+	</div>
+	<?php
+}
+
+function fms_broadsheet_footer() {
+	?>
+	<footer class="fms-footer">
+		<div class="fms-footer__in">
+			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Faded Main Street</span>
+			<span>
+				<a href="<?php echo esc_url( FMS_CHANNEL_URL ); ?>">YouTube</a>
+				<?php /* Uncomment as each goes live:
+				<a href="https://www.pinterest.com/…">Pinterest</a>
+				<a href="#">Newsletter</a>
+				*/ ?>
+			</span>
+		</div>
+	</footer>
+	<?php
+}
+
+/**
+ * Ensure the About page exists (slug "about", assigned to the About template)
+ * so the nav and homepage links never 404. Runs once per site.
+ */
+add_action( 'init', function () {
+	if ( get_option( 'fms_about_page_created' ) || wp_installing() ) {
+		return;
+	}
+	if ( ! get_page_by_path( 'about' ) ) {
+		wp_insert_post( array(
+			'post_title'   => 'About',
+			'post_name'    => 'about',
+			'post_type'    => 'page',
+			'post_status'  => 'publish',
+			'post_content' => '',
+			'meta_input'   => array( '_wp_page_template' => 'page-about.php' ),
+		) );
+	}
+	update_option( 'fms_about_page_created', 1 );
+} );
+
 /** "YouTube video ID" field: plain post meta, editable in the sidebar. */
 add_action( 'init', function () {
 	register_post_meta( 'post', 'fms_youtube_id', array(

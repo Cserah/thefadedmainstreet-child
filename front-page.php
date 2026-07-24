@@ -37,28 +37,7 @@ function fms_post_still( $post_id ) {
 
 <main id="main" class="fms-home">
 
-	<div class="fms-topbar">
-		<div class="fms-topbar__in">
-			<a class="fms-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<span class="fms-logo__stamp" aria-hidden="true">FM</span>
-				<span>
-					<span class="fms-logo__name">Faded Main Street</span>
-					<span class="fms-logo__tag">Stories of Vanished America</span>
-				</span>
-			</a>
-			<nav class="fms-nav" aria-label="<?php esc_attr_e( 'Primary', 'thefadedmainstreet-child' ); ?>">
-				<a href="#stories">Stories</a>
-				<a href="#themes">Themes</a>
-				<a href="#map">The Map</a>
-				<a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
-				<a class="fms-btn" href="<?php echo esc_url( $fms_channel ); ?>">Subscribe &#9656;</a>
-			</nav>
-		</div>
-	</div>
-
-	<div class="fms-masthead">
-		Vol. I <span class="d">&#9670;</span> Documented before it disappears <span class="d">&#9670;</span> Est. 2026
-	</div>
+	<?php fms_topbar(); ?>
 
 	<section class="fms-hero">
 		<img class="fms-hero__img"
@@ -198,10 +177,7 @@ function fms_post_still( $post_id ) {
 						<div class="fms-stat"><b><?php echo esc_html( max( 1, $fms_story_count ) ); ?></b><span><?php echo esc_html( _n( 'Story', 'Stories', max( 1, $fms_story_count ), 'thefadedmainstreet-child' ) ); ?></span></div>
 						<div class="fms-stat"><b>4</b><span>Themes</span></div>
 					</div>
-					<p>
-						<a class="fms-btn" href="<?php echo esc_url( $fms_channel ); ?>">Explore the map &#9656;</a>
-						<a class="fms-map__submit" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">Know a place? Submit a location &rarr;</a>
-					</p>
+					<p><a class="fms-btn" href="<?php echo esc_url( $fms_channel ); ?>">Explore the map &#9656;</a></p>
 				</div>
 			</div>
 		</div>
@@ -214,18 +190,7 @@ function fms_post_still( $post_id ) {
 		<a class="fms-btn" href="<?php echo esc_url( $fms_channel ); ?>">&#9654;&nbsp; Subscribe on YouTube</a>
 	</section>
 
-	<footer class="fms-footer">
-		<div class="fms-footer__in">
-			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Faded Main Street</span>
-			<span>
-				<a href="<?php echo esc_url( $fms_channel ); ?>">YouTube</a>
-				<?php /* Uncomment as each goes live:
-				<a href="https://www.pinterest.com/…">Pinterest</a>
-				<a href="#">Newsletter</a>
-				*/ ?>
-			</span>
-		</div>
-	</footer>
+	<?php fms_broadsheet_footer(); ?>
 
 </main>
 
