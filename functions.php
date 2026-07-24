@@ -7,6 +7,18 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 define( 'FMS_VERSION', wp_get_theme()->get( 'Version' ) );
 
+/**
+ * Cloudflare Flexible SSL: WP's site URL is http at the origin, so theme URIs
+ * come out as http://. Cloudflare rewrites src attributes to https but NOT
+ * srcset, which mixed-content-blocks <picture>/<img srcset> images. Force
+ * https on all theme asset URIs.
+ */
+foreach ( array( 'stylesheet_directory_uri', 'template_directory_uri', 'stylesheet_uri' ) as $fms_uri_filter ) {
+	add_filter( $fms_uri_filter, function ( $uri ) {
+		return set_url_scheme( $uri, 'https' );
+	} );
+}
+
 /** Parent + child styles, Google Fonts (Playfair Display, Lora, Pinyon Script). */
 add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'blocksy-parent', get_template_directory_uri() . '/style.css', array(), null );
