@@ -15,7 +15,7 @@ $fms_assets = get_stylesheet_directory_uri() . '/assets';
 
 	<section class="fms-hero">
 		<img class="fms-hero__img"
-			src="<?php echo esc_url( $fms_assets . '/channel-banner-street-corner.jpg' ); ?>"
+			src="<?php echo esc_url( $fms_assets . '/channel-banner-safezone.jpg' ); ?>"
 			alt="A faded painted 'Faded Main Street' sign on an aged brick wall at golden hour"
 			width="2752" height="1536" fetchpriority="high" decoding="async" />
 		<div class="fms-hero__scrim" aria-hidden="true"></div>
@@ -27,16 +27,15 @@ $fms_assets = get_stylesheet_directory_uri() . '/assets';
 		</div>
 	</section>
 
-	<section class="fms-section fms-about">
+	<section class="fms-section fms-about-teaser">
 		<div class="fms-wrap fms-wrap--narrow">
 			<img class="fms-monogram"
 				src="<?php echo esc_url( $fms_assets . '/profile-icon.jpg' ); ?>"
 				alt="Faded Main Street monogram — a cream script F painted on brick"
 				width="84" height="84" loading="lazy" decoding="async" />
 			<span class="fms-eyebrow">About the channel</span>
-			<h2 class="fms-section-title">Every town had a main street. Most of them faded.</h2>
-			<p>Faded Main Street is a documentary channel about the America that's still visible if you know where to look: hand-painted advertisements bleeding through brick, department stores that anchored a downtown for a century, products every household owned and no one remembers buying last.</p>
-			<p>Each episode digs into one place, one sign, or one vanished name — who built it, why it mattered, and what's left. The articles on this site accompany each video with the photographs, sources, and details that don't fit on screen.</p>
+			<p>Faded Main Street documents the America that's still visible if you know where to look — one sign, one building, one vanished name at a time.</p>
+			<a class="fms-more-link" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">Read more &rarr;</a>
 		</div>
 	</section>
 
@@ -108,8 +107,8 @@ $fms_assets = get_stylesheet_directory_uri() . '/assets';
 	<section class="fms-section fms-follow">
 		<div class="fms-wrap fms-wrap--narrow">
 			<span class="fms-eyebrow">Follow along</span>
-			<h2 class="fms-section-title">Don't let it fade without you</h2>
-			<p>New documentaries on YouTube, photo stories everywhere else.</p>
+			<h2 class="fms-section-title">Follow the stories</h2>
+			<p>New documentaries on YouTube &mdash; photo stories on Pinterest and beyond.</p>
 			<ul class="fms-follow-links">
 				<li><a href="https://www.youtube.com/@thefadedmainstreet">YouTube</a></li>
 				<?php /* Uncomment as each profile goes live — keep in sync with the

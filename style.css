@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — a documentary channe
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.0.0
+Version:      1.0.1
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -53,13 +53,18 @@ a:hover { color: var(--fms-brick-deep); }
 .fms-wrap { max-width: 72rem; margin: 0 auto; }
 .fms-wrap--narrow { max-width: 46rem; }
 
+/* Eyebrow labels: letterspaced small-caps serif (script failed contrast at
+   small sizes; Pinyon survives only in the hero, large on a dark scrim). */
 .fms-eyebrow {
-  font-family: var(--fms-script);
-  font-size: 2rem;
-  line-height: 1.1;
-  color: var(--fms-amber);
+  font-family: var(--fms-serif);
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--fms-brick);
   display: block;
-  margin-bottom: .5rem;
+  margin-bottom: .75rem;
 }
 
 .fms-section-title {
@@ -90,7 +95,7 @@ a:hover { color: var(--fms-brick-deep); }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  object-position: 70% 45%; /* keep the wall sign in frame */
+  object-position: 52% 38%; /* keep the painted sign band in frame */
 }
 .fms-hero__scrim {
   position: absolute; inset: 0;
@@ -103,10 +108,12 @@ a:hover { color: var(--fms-brick-deep); }
   margin: 0 auto;
   padding: 6rem 1.5rem 3.5rem;
 }
+/* The one surviving script use: large, cream on a dark scrim, shadowed. */
 .fms-hero__kicker {
   font-family: var(--fms-script);
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  color: var(--fms-amber-soft);
+  font-size: clamp(2rem, 4.5vw, 2.8rem);
+  color: var(--fms-cream);
+  text-shadow: 0 2px 14px rgba(0,0,0,.55);
   display: block;
   margin-bottom: .25rem;
 }
@@ -199,9 +206,9 @@ a:hover { color: var(--fms-brick-deep); }
 }
 .fms-theme h3 { font-size: 1.45rem; margin: 0 0 .5rem; }
 .fms-theme h3 .fms-theme-no {
-  font-family: var(--fms-script);
-  color: var(--fms-amber);
-  font-size: 1.9rem;
+  font-family: var(--fms-display);
+  font-style: italic;
+  color: var(--fms-brick);
   margin-right: .6rem;
 }
 .fms-theme p { margin: 0; font-size: 1.05rem; }
@@ -215,6 +222,15 @@ a:hover { color: var(--fms-brick-deep); }
   text-align: center;
 }
 .fms-follow .fms-eyebrow { color: var(--fms-amber-soft); }
+.fms-about-teaser { text-align: center; }
+.fms-about-teaser p { font-size: 1.25rem; max-width: 40rem; margin: 0 auto 1rem; }
+.fms-more-link {
+  font-family: var(--fms-serif);
+  font-size: 1.05rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--fms-amber);
+  padding-bottom: .1rem;
+}
 .fms-follow .fms-section-title { color: var(--fms-cream); }
 .fms-follow-links {
   display: flex; flex-wrap: wrap; justify-content: center;
@@ -285,8 +301,8 @@ a:hover { color: var(--fms-brick-deep); }
 @media (max-width: 760px) {
   .fms-section { padding: 3.25rem 1.25rem; }
   .fms-themes-list { grid-template-columns: 1fr; }
-  .fms-hero { min-height: 72vh; }
-  .fms-hero__img { object-position: 62% 45%; }
+  .fms-hero { min-height: 60vh; } /* shallower crop keeps the full sign band visible */
+  .fms-hero__img { object-position: 52% 38%; }
   .fms-article-video { transform: translateY(1.75rem); padding: 0 1rem; }
   .fms-article-body { padding-top: 3.5rem; }
 }
