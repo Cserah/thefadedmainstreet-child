@@ -9,6 +9,9 @@ get_header();
 ?>
 
 <main id="main" class="fms-single">
+
+<?php fms_topbar(); ?>
+
 <?php while ( have_posts() ) : the_post();
 	$vid = get_post_meta( get_the_ID(), 'fms_youtube_id', true ); ?>
 
@@ -45,6 +48,9 @@ get_header();
 	</section>
 
 <?php endwhile; ?>
+
+	<?php fms_broadsheet_footer(); ?>
+
 </main>
 
 <?php get_footer(); ?>

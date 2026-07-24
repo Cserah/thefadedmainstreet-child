@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.1.4
+Version:      1.2.0
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -55,6 +55,8 @@ a:hover { color: var(--fms-brick-hover); }
    footer on the homepage only. */
 body.home header#header, body.home .ct-header,
 body.home footer.ct-footer, body.home #footer,
+body.single-post header#header, body.single-post .ct-header,
+body.single-post footer.ct-footer, body.single-post #footer,
 body.page-template-page-about header#header, body.page-template-page-about .ct-header,
 body.page-template-page-about footer.ct-footer, body.page-template-page-about #footer { display: none; }
 
@@ -491,21 +493,22 @@ a.fms-still:hover img { transform: scale(1.03); }
    Article pages (single + about), restyled to the Broadsheet tokens
 --------------------------------------------------------------------------- */
 .fms-article-hero {
-  background: var(--fms-ink);
-  color: var(--fms-paper);
-  padding: 56px 24px 44px;
-  text-align: center;
+  background: var(--fms-paper-mid);
+  color: var(--fms-ink);
+  padding: 48px 24px 4px;
+  text-align: left;
+  max-width: 768px;
+  margin: 0 auto;
 }
-.fms-article-hero .fms-eyebrow { color: var(--fms-sepia-light); }
+.fms-article-hero .fms-eyebrow { color: var(--fms-brick); }
 .fms-article-hero h1 {
-  color: var(--fms-paper);
-  font-size: clamp(30px, 4.5vw, 48px);
-  line-height: 1.05;
-  max-width: 800px;
-  margin: 0 auto 12px;
+  color: var(--fms-ink);
+  font-size: clamp(30px, 4.5vw, 46px);
+  line-height: 1.1;
+  margin: 0 0 10px;
 }
 .fms-article-hero .fms-article-meta {
-  font-style: italic; color: var(--fms-diamond); font-size: 15px;
+  font-style: italic; color: var(--fms-sepia); font-size: 15px; margin: 0;
 }
 .fms-article-video {
   max-width: 900px;
@@ -514,7 +517,9 @@ a.fms-still:hover img { transform: scale(1.03); }
   transform: translateY(40px);
 }
 .fms-article-video .fms-video-box { box-shadow: 0 14px 40px rgba(30,22,14,.35); }
-.fms-article-body { background: var(--fms-paper-mid); padding: 96px 24px 64px; }
+.fms-article-body { background: var(--fms-paper-mid); padding: 20px 24px 64px; }
+/* Video posts keep the overlap gap; text-only posts sit tight under the title. */
+.fms-article-video + .fms-article-body { padding-top: 96px; }
 .fms-article-body .fms-wrap--narrow { max-width: 720px; margin: 0 auto; }
 .fms-article-body p { font-size: 18px; line-height: 1.7; margin: 0 0 24px; }
 .fms-article-body h2 { font-size: 30px; margin: 40px 0 16px; }
@@ -536,6 +541,103 @@ a.fms-still:hover img { transform: scale(1.03); }
 .fms-about .fms-wrap--narrow { max-width: 720px; margin: 0 auto; }
 .fms-about p { font-size: 18px; line-height: 1.7; margin: 0 auto 20px; }
 .fms-about .fms-section-title { font-size: 34px; margin: 0 0 18px; }
+
+/* ---------------------------------------------------------------------------
+   Informational-article components (ia-*)
+   Long-form posts built by the informational-article generator. The markup
+   ships these class names; the styling lives here (not inline in post
+   content) because wpautop injects <br> into inline <style> blocks and
+   breaks them.
+--------------------------------------------------------------------------- */
+.fms-article-body .ia-wrap { max-width: none; margin: 0; padding: 0; font-family: inherit; font-size: inherit; color: inherit; }
+.ia-kicker {
+  font-family: var(--fms-label);
+  font-size: 11px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: .3em; color: var(--fms-brick); margin: 0 0 10px;
+}
+.ia-byline {
+  font-family: var(--fms-label); font-size: 14px; font-weight: 300;
+  color: var(--fms-body); line-height: 1.6;
+  display: flex; align-items: center; gap: 14px;
+  margin: 0 0 28px; padding-bottom: 22px;
+  border-bottom: 1px solid var(--fms-rule);
+}
+.fms-article-body .ia-byline img {
+  width: 46px; height: 46px; border-radius: 50%; flex: none; object-fit: cover;
+}
+.ia-punchline {
+  font-family: var(--fms-serif);
+  font-size: 21px; line-height: 1.5; font-weight: 500;
+  color: var(--fms-ink); background: var(--fms-paper);
+  border-left: 4px solid var(--fms-brick);
+  padding: 20px 24px; margin: 0 0 28px; border-radius: 0 6px 6px 0;
+}
+.ia-takeaways { background: var(--fms-ink); border-radius: 10px; padding: 24px 28px; margin: 0 0 32px; }
+.fms-article-body .ia-takeaways h3 {
+  font-family: var(--fms-label);
+  font-size: 13px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: .22em; color: var(--fms-sepia-light);
+  margin: 0 0 14px;
+}
+.fms-article-body .ia-takeaways ul { margin: 0; padding-left: 20px; }
+.fms-article-body .ia-takeaways li { color: var(--fms-paper); font-size: 16px; line-height: 1.6; margin: 9px 0; }
+.fms-article-body .ia-takeaways a { color: var(--fms-sepia-light); }
+.fms-article-body .ia-takeaways a:hover { color: var(--fms-paper); }
+.ia-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin: 28px 0; }
+.ia-stat-card { background: var(--fms-paper); border: 1px solid var(--fms-rule); border-radius: 8px; padding: 18px 20px; }
+.ia-stat-card b {
+  display: block; font-family: var(--fms-display);
+  font-size: 30px; line-height: 1.05; color: var(--fms-brick); margin-bottom: 7px;
+}
+.ia-stat-card span { font-family: var(--fms-label); font-weight: 300; font-size: 13px; line-height: 1.5; color: var(--fms-body); display: block; }
+.ia-method-table { border-collapse: collapse; width: 100%; margin: 28px 0; font-family: var(--fms-label); font-weight: 300; font-size: 14px; }
+.ia-method-table th { background: var(--fms-ink); color: var(--fms-paper); text-align: left; padding: 11px 13px; font-weight: 500; }
+.ia-method-table td { border: 1px solid var(--fms-rule); padding: 10px 13px; vertical-align: top; color: var(--fms-body); }
+.ia-method-table tr:nth-child(even) td { background: var(--fms-paper); }
+.ia-svgbox { background: var(--fms-ink); padding: 26px 22px; border-radius: 10px; margin: 28px 0; }
+.ia-svgbox svg { width: 100%; height: auto; display: block; }
+.fms-article-body .ia-figcap {
+  font-family: var(--fms-label); font-weight: 300;
+  font-size: 13px; line-height: 1.5; color: var(--fms-sepia);
+  margin: 8px 2px 0; font-style: normal;
+}
+.fms-article-body figure { margin: 28px 0; }
+.fms-article-body figure img { border-radius: 8px; display: block; }
+.ia-note {
+  background: var(--fms-paper); border: 1px solid var(--fms-rule);
+  border-radius: 8px; padding: 18px 22px; margin: 32px 0;
+}
+.fms-article-body .ia-note { font-size: 15px; line-height: 1.65; color: var(--fms-body); }
+.ia-faq details {
+  border: 1px solid var(--fms-rule); border-radius: 8px;
+  margin: 10px 0; padding: 0 18px; background: var(--fms-paper);
+}
+.ia-faq summary {
+  cursor: pointer; padding: 15px 0; color: var(--fms-ink);
+  font-family: var(--fms-label); font-weight: 500; font-size: 15px;
+}
+.fms-article-body .ia-faq p { padding-bottom: 16px; margin: 0; font-size: 16px; }
+.ia-cta { background: var(--fms-ink); border-radius: 10px; padding: 28px; margin: 36px 0; text-align: center; }
+.fms-article-body .ia-cta h3 {
+  font-family: var(--fms-display); color: var(--fms-sepia-light);
+  margin: 0 0 10px; font-size: 24px;
+}
+.fms-article-body .ia-cta p { color: var(--fms-paper); margin: 0; font-size: 16px; }
+.fms-article-body .ia-cta a { color: var(--fms-sepia-light); font-weight: 500; }
+.fms-article-body .ia-cta a:hover { color: var(--fms-paper); }
+.ia-author-box {
+  display: flex; gap: 18px; align-items: flex-start;
+  background: var(--fms-paper); border: 1px solid var(--fms-rule);
+  border-radius: 10px; padding: 20px 22px; margin: 36px 0 0;
+}
+.fms-article-body .ia-author-box img { width: 64px; height: 64px; border-radius: 50%; flex: none; object-fit: cover; }
+.fms-article-body .ia-author-box p { margin: 5px 0 0; font-size: 15px; line-height: 1.6; }
+.ia-author-box strong { font-family: var(--fms-label); font-weight: 500; letter-spacing: .04em; color: var(--fms-ink); }
+@media (max-width: 600px) {
+  .ia-byline { flex-wrap: wrap; gap: 10px; }
+  .ia-punchline { font-size: 18px; padding: 16px 18px; }
+  .ia-author-box { flex-direction: column; }
+}
 
 /* ---------------------------------------------------------------------------
    Responsive
