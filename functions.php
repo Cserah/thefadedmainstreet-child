@@ -24,6 +24,14 @@ add_action( 'wp_enqueue_scripts', function () {
 	);
 } );
 
+/** Favicon set (generated from the F monogram). */
+add_action( 'wp_head', function () {
+	$a = get_stylesheet_directory_uri() . '/assets';
+	echo '<link rel="icon" href="' . esc_url( $a . '/favicon.ico' ) . '" sizes="32x32">' . "\n";
+	echo '<link rel="icon" type="image/png" href="' . esc_url( $a . '/favicon-192.png' ) . '" sizes="192x192">' . "\n";
+	echo '<link rel="apple-touch-icon" href="' . esc_url( $a . '/apple-touch-icon.png' ) . '">' . "\n";
+}, 4 );
+
 /** Preconnect for the font CDN (Core Web Vitals). */
 add_filter( 'wp_resource_hints', function ( $urls, $relation ) {
 	if ( 'preconnect' === $relation ) {
