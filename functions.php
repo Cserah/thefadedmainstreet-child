@@ -125,6 +125,26 @@ add_action( 'wp_footer', function () {
 	<?php
 } );
 
+/**
+ * Long-form articles (the .ia-wrap generator output) ship fully-formed markup:
+ * explicit <p> tags, <section> bands, inline <svg>, and a JSON-LD <script>.
+ * wpautop actively damages all of that — it injects <br> between the SVG's
+ * child elements, which forces the HTML parser out of foreign content and
+ * closes the <svg> early (the timeline then spills out as loose text), and it
+ * wraps the JSON-LD script in a stray paragraph. Turn it off for these posts
+ * only; ordinary posts written in the editor keep it.
+ */
+add_action( 'wp', function () {
+	if ( ! is_singular( 'post' ) ) {
+		return;
+	}
+	$post = get_post();
+	if ( $post && false !== strpos( $post->post_content, 'class="ia-wrap"' ) ) {
+		remove_filter( 'the_content', 'wpautop' );
+		remove_filter( 'the_content', 'shortcode_unautop' );
+	}
+} );
+
 /* ---------------------------------------------------------------------------
    Shared Broadsheet bands (top bar / masthead / footer), used by the
    homepage and About templates.
