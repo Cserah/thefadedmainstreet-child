@@ -1,308 +1,552 @@
 /*
 Theme Name:   Faded Main Street Child
 Theme URI:    https://thefadedmainstreet.com
-Description:  Blocksy child theme for Faded Main Street — a documentary channel about vanished America. Aged brick, cream script, golden hour.
+Description:  Blocksy child theme for Faded Main Street — direction 1A "The Broadsheet". Archival broadsheet: warm paper tones, brick red, DM Serif Display / Newsreader / Oswald / Grand Hotel.
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.0.1
+Version:      1.1.0
 Text Domain:  thefadedmainstreet-child
 */
 
 /* ---------------------------------------------------------------------------
-   Palette & type
-   Brick, parchment, amber. Serif throughout: Playfair Display (display),
-   Lora (body), Pinyon Script (small Spencerian accents only).
+   Design tokens — 1A "The Broadsheet"
 --------------------------------------------------------------------------- */
 :root {
-  --fms-brick: #7c2d1e;
-  --fms-brick-deep: #5d2013;
-  --fms-umber: #33221a;
-  --fms-ink: #2b2018;
-  --fms-parchment: #f6efe2;
-  --fms-cream: #f3e4c8;
-  --fms-amber: #c98a3e;
-  --fms-amber-soft: #e0b070;
-  --fms-line: rgba(92, 62, 40, .25);
-  --fms-serif: "Lora", Georgia, serif;
-  --fms-display: "Playfair Display", "Lora", Georgia, serif;
-  --fms-script: "Pinyon Script", cursive;
+  --fms-page-bg: #d8ccb4;
+  --fms-paper: #f3ead9;
+  --fms-paper-mid: #efe6d4;
+  --fms-paper-warm: #e7dcc4;
+  --fms-ink: #2a2118;
+  --fms-body: #4a4034;
+  --fms-brick: #8a2f22;
+  --fms-brick-deep: #6d241a;
+  --fms-brick-hover: #b0472f;
+  --fms-sepia: #9c7a4f;
+  --fms-sepia-light: #e6b98a;
+  --fms-sepia-pale: #e7cbb8;
+  --fms-rule: #cbb98f;
+  --fms-diamond: #c9b892;
+  --fms-map-surface: #ded0b0;
+  --fms-display: "DM Serif Display", Georgia, serif;
+  --fms-serif: "Newsreader", Georgia, serif;
+  --fms-label: "Oswald", Arial, sans-serif;
+  --fms-script: "Grand Hotel", cursive;
 }
 
 body {
   font-family: var(--fms-serif);
-  color: var(--fms-ink);
-  background: var(--fms-parchment);
-  font-size: 1.125rem;
-  line-height: 1.75;
+  color: var(--fms-body);
+  background: var(--fms-page-bg);
+  font-size: 17px;
+  line-height: 1.6;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--fms-display);
-  color: var(--fms-umber);
-  letter-spacing: .01em;
+  font-weight: 400;
+  color: var(--fms-ink);
 }
 
-a { color: var(--fms-brick); }
-a:hover { color: var(--fms-brick-deep); }
+a { color: var(--fms-brick); transition: color .3s ease; }
+a:hover { color: var(--fms-brick-hover); }
+
+/* Blocksy's own header/footer are replaced by the template's top bar and
+   footer on the homepage only. */
+body.home header#header, body.home .ct-header,
+body.home footer.ct-footer, body.home #footer { display: none; }
 
 /* ---------------------------------------------------------------------------
-   Shared section furniture
+   Shared band furniture
 --------------------------------------------------------------------------- */
-.fms-section { padding: 4.5rem 1.5rem; }
-.fms-wrap { max-width: 72rem; margin: 0 auto; }
-.fms-wrap--narrow { max-width: 46rem; }
+.fms-band { padding: 56px 48px; border-bottom: 1px solid var(--fms-rule); }
+.fms-wrap { max-width: 1280px; margin: 0 auto; }
 
-/* Eyebrow labels: letterspaced small-caps serif (script failed contrast at
-   small sizes; Pinyon survives only in the hero, large on a dark scrim). */
 .fms-eyebrow {
-  font-family: var(--fms-serif);
-  font-size: .875rem;
-  font-weight: 600;
-  line-height: 1.2;
+  font-family: var(--fms-label);
+  font-size: 11px;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: .15em;
+  letter-spacing: .3em;
   color: var(--fms-brick);
   display: block;
-  margin-bottom: .75rem;
+  margin-bottom: 14px;
+}
+.fms-kicker {
+  font-family: var(--fms-label);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  color: var(--fms-sepia);
+  display: block;
+  margin-bottom: 10px;
 }
 
-.fms-section-title {
-  font-size: clamp(1.9rem, 4vw, 2.6rem);
-  margin: 0 0 1rem;
+.fms-btn {
+  display: inline-block;
+  font-family: var(--fms-label);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  padding: 14px 22px;
+  background: var(--fms-brick);
+  color: var(--fms-paper);
+  text-decoration: none;
+  transition: background .3s ease;
 }
-
-.fms-rule {
-  border: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--fms-line), transparent);
-  margin: 0 auto;
-  max-width: 72rem;
+.fms-btn:hover { background: var(--fms-brick-deep); color: var(--fms-paper); }
+.fms-btn--ghost {
+  background: transparent;
+  border: 1px solid var(--fms-paper-warm);
+  color: var(--fms-paper);
 }
+.fms-btn--ghost:hover { background: rgba(243,234,217,.12); color: var(--fms-paper); }
 
 /* ---------------------------------------------------------------------------
-   Hero — banner artwork, positioned so the painted sign stays visible
+   1. Top bar
+--------------------------------------------------------------------------- */
+.fms-topbar {
+  background: var(--fms-paper);
+  border-bottom: 1px solid var(--fms-rule);
+  padding: 20px 40px;
+}
+.fms-topbar__in {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  flex-wrap: wrap;
+}
+.fms-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+.fms-logo__stamp {
+  width: 50px; height: 50px; flex: none;
+  background: var(--fms-brick);
+  color: var(--fms-paper-mid);
+  font-family: var(--fms-display);
+  font-size: 22px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 0 0 3px #efe6d4, inset 0 0 0 4px #8a2f22;
+}
+.fms-logo__name {
+  font-family: var(--fms-display);
+  font-size: 20px;
+  color: var(--fms-ink);
+  line-height: 1.1;
+  display: block;
+}
+.fms-logo__tag {
+  font-family: var(--fms-label);
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .4em;
+  color: var(--fms-sepia);
+  display: block;
+  margin-top: 3px;
+}
+.fms-nav { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+.fms-nav a {
+  font-family: var(--fms-label);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--fms-body);
+  text-decoration: none;
+}
+.fms-nav a:hover { color: var(--fms-brick-hover); }
+.fms-nav .fms-btn { padding: 10px 16px; font-size: 12px; }
+
+/* ---------------------------------------------------------------------------
+   2. Masthead rule
+--------------------------------------------------------------------------- */
+.fms-masthead {
+  background: var(--fms-paper);
+  border-bottom: 3px double var(--fms-rule);
+  text-align: center;
+  padding: 12px 20px;
+  font-family: var(--fms-label);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .32em;
+  color: var(--fms-sepia);
+}
+.fms-masthead .d { color: var(--fms-diamond); }
+
+/* ---------------------------------------------------------------------------
+   3. Hero
 --------------------------------------------------------------------------- */
 .fms-hero {
   position: relative;
-  min-height: min(88vh, 46rem);
-  display: flex;
-  align-items: flex-end;
-  color: var(--fms-cream);
-  background: var(--fms-umber);
+  height: 520px;
+  background: var(--fms-ink);
+  overflow: hidden;
 }
 .fms-hero__img {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  object-position: 52% 38%; /* keep the painted sign band in frame */
+  object-position: 62% 50%; /* keep the ghost sign right-of-center */
 }
-.fms-hero__scrim {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(43,26,20,.15) 30%, rgba(43,26,20,.82) 100%);
+.fms-hero__grade, .fms-hero__tint {
+  position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
 }
-.fms-hero__inner {
-  position: relative;
-  width: 100%;
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 6rem 1.5rem 3.5rem;
+.fms-hero__grade { background: linear-gradient(90deg, rgba(30,22,14,.82), rgba(30,22,14,.05)); }
+.fms-hero__tint  { background: linear-gradient(180deg, rgba(122,47,34,.28), rgba(30,22,14,.35)); }
+.fms-hero__text {
+  position: absolute; left: 48px; bottom: 52px;
+  max-width: 600px;
 }
-/* The one surviving script use: large, cream on a dark scrim, shadowed. */
-.fms-hero__kicker {
+.fms-hero__script {
   font-family: var(--fms-script);
-  font-size: clamp(2rem, 4.5vw, 2.8rem);
-  color: var(--fms-cream);
-  text-shadow: 0 2px 14px rgba(0,0,0,.55);
+  font-size: 34px;
+  color: var(--fms-sepia-light);
+  opacity: .9;
   display: block;
-  margin-bottom: .25rem;
 }
 .fms-hero__title {
   font-family: var(--fms-display);
-  font-weight: 700;
-  font-size: clamp(2.4rem, 6vw, 4.2rem);
-  line-height: 1.08;
-  color: var(--fms-cream);
-  margin: 0 0 .75rem;
-  text-shadow: 0 2px 18px rgba(0,0,0,.45);
+  font-size: 66px;
+  line-height: .98;
+  color: var(--fms-paper);
+  margin: 6px 0 16px;
+  text-shadow: 0 2px 24px rgba(0,0,0,.4);
 }
-.fms-hero__tagline {
-  font-size: clamp(1.15rem, 2.2vw, 1.4rem);
-  max-width: 34rem;
-  margin: 0 0 1.75rem;
-  color: #f0e3cd;
+.fms-hero__dek {
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--fms-paper-warm);
+  margin: 0 0 24px;
 }
-.fms-btn {
-  display: inline-block;
-  font-family: var(--fms-serif);
-  font-size: 1.05rem;
-  padding: .8rem 1.7rem;
-  border: 1px solid var(--fms-amber-soft);
-  border-radius: 2px;
-  color: var(--fms-cream);
-  background: rgba(93,32,19,.55);
-  text-decoration: none;
-  transition: background .2s ease;
-}
-.fms-btn:hover { background: var(--fms-brick-deep); color: var(--fms-cream); }
-.fms-btn--solid { background: var(--fms-brick); border-color: var(--fms-brick); }
+.fms-hero__btns { display: flex; gap: 14px; flex-wrap: wrap; }
 
 /* ---------------------------------------------------------------------------
-   About
+   4. Featured story
 --------------------------------------------------------------------------- */
-.fms-about { text-align: center; }
-.fms-about p { font-size: 1.2rem; margin: 0 auto 1.25rem; max-width: 44rem; }
-.fms-about .fms-monogram {
-  width: 84px; height: 84px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin: 0 auto 1.25rem;
-  display: block;
-  box-shadow: 0 4px 18px rgba(43,26,20,.25);
-}
-
-/* ---------------------------------------------------------------------------
-   Latest videos — responsive grid of lazy YouTube facades
---------------------------------------------------------------------------- */
-.fms-videos { background: #efe5d2; }
-.fms-video-grid {
+.fms-featured { background: var(--fms-paper-mid); }
+.fms-featured__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 40px;
+  align-items: center;
+  margin-top: 10px;
 }
-.fms-card { background: #fffdf7; border: 1px solid var(--fms-line); }
-.fms-card__media { position: relative; aspect-ratio: 16 / 9; background: var(--fms-umber); }
-.fms-card__media img, .fms-card__media iframe {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; border: 0;
+.fms-still {
+  position: relative;
+  height: 340px;
+  background: var(--fms-ink);
+  overflow: hidden;
+  display: block;
+}
+.fms-still img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .3s ease;
+}
+a.fms-still:hover img { transform: scale(1.03); }
+.fms-still__shade {
+  position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+  background: linear-gradient(180deg, rgba(30,22,14,0) 55%, rgba(30,22,14,.6));
+}
+.fms-still__badge {
+  position: absolute; top: 14px; left: 14px;
+  background: var(--fms-brick);
+  color: var(--fms-paper);
+  font-family: var(--fms-label);
+  font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .12em;
+  padding: 6px 10px;
+}
+.fms-still__play {
+  position: absolute; top: 50%; left: 50%;
+  width: 74px; height: 74px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(243,234,217,.92);
+  color: var(--fms-brick);
+  font-size: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border: 0; cursor: pointer;
+}
+.fms-featured__title {
+  font-size: 38px;
+  line-height: 1.05;
+  margin: 0 0 16px;
+}
+.fms-featured__body { font-size: 17px; line-height: 1.6; margin: 0 0 22px; }
+.fms-featured__meta {
+  font-style: italic;
+  font-size: 14px;
+  color: var(--fms-sepia);
+  margin-left: 16px;
+}
+
+/* ---------------------------------------------------------------------------
+   5. Recent stories
+--------------------------------------------------------------------------- */
+.fms-recent { background: var(--fms-paper-warm); }
+.fms-recent__head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 20px; flex-wrap: wrap; margin-bottom: 26px;
+}
+.fms-recent__head h3 { font-size: 30px; margin: 0; }
+.fms-archive-link {
+  font-family: var(--fms-label);
+  font-size: 12px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .16em;
+  text-decoration: none;
+}
+.fms-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.fms-card { text-decoration: none; display: block; }
+.fms-card__media {
+  position: relative; height: 190px; background: var(--fms-ink); overflow: hidden;
+  margin-bottom: 14px;
+}
+.fms-card__media img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .3s ease;
+}
+.fms-card:hover .fms-card__media img { transform: scale(1.03); }
+.fms-card__chip {
+  position: absolute; right: 10px; bottom: 10px;
+  background: rgba(30,22,14,.82);
+  color: var(--fms-paper);
+  font-family: var(--fms-label);
+  font-size: 11px; font-weight: 500; letter-spacing: .08em;
+  padding: 4px 8px;
+}
+.fms-card__kicker {
+  font-family: var(--fms-label);
+  font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .2em;
+  color: var(--fms-brick);
+  display: block; margin-bottom: 6px;
+}
+.fms-card h4 {
+  font-size: 21px; line-height: 1.1; margin: 0 0 8px; color: var(--fms-ink);
+}
+.fms-card:hover h4 { color: var(--fms-brick); }
+.fms-card p { font-size: 14px; line-height: 1.5; margin: 0; color: var(--fms-body); }
+
+/* ---------------------------------------------------------------------------
+   6. Recurring themes
+--------------------------------------------------------------------------- */
+.fms-themes { background: var(--fms-paper-mid); }
+.fms-themes h3 { font-size: 30px; margin: 0 0 8px; }
+.fms-themes__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 34px 56px;
+  margin-top: 26px;
+}
+.fms-theme { border-top: 1px solid var(--fms-rule); padding-top: 18px; }
+.fms-theme__no {
+  font-family: var(--fms-display);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--fms-brick);
+  display: block;
+  margin-bottom: 6px;
+}
+.fms-theme h4 { font-size: 19px; margin: 0 0 8px; }
+.fms-theme p { font-size: 14px; line-height: 1.55; margin: 0; }
+
+/* ---------------------------------------------------------------------------
+   7. The Map
+--------------------------------------------------------------------------- */
+.fms-map { background: var(--fms-paper-warm); }
+.fms-map__grid {
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: 44px;
+  align-items: center;
+}
+.fms-map__surface {
+  position: relative;
+  height: 380px;
+  border: 1px solid var(--fms-rule);
+  background:
+    radial-gradient(circle at 30% 40%, rgba(155,122,79,.14), transparent 55%),
+    radial-gradient(circle at 70% 60%, rgba(122,47,34,.10), transparent 50%),
+    var(--fms-map-surface);
+}
+.fms-map__surface img {
+  width: 100%; height: 100%; object-fit: cover; display: block; mix-blend-mode: multiply;
+}
+.fms-pin {
+  position: absolute;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--fms-brick);
+  box-shadow: 0 0 0 4px rgba(138,47,34,.28);
+}
+.fms-pin--sm { width: 12px; height: 12px; background: var(--fms-brick-hover); box-shadow: none; }
+.fms-map__title { font-size: 32px; margin: 0 0 14px; }
+.fms-map__body { font-size: 16px; margin: 0 0 24px; }
+.fms-stats { display: flex; gap: 36px; margin: 0 0 26px; }
+.fms-stat b {
+  font-family: var(--fms-display);
+  font-weight: 400;
+  font-size: 30px;
+  color: var(--fms-brick);
+  display: block;
+}
+.fms-stat span {
+  font-family: var(--fms-label);
+  font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .16em;
+  color: var(--fms-sepia);
+}
+.fms-map__submit {
+  font-style: italic;
+  font-size: 15px;
+  margin-left: 16px;
+}
+
+/* ---------------------------------------------------------------------------
+   8. YouTube subscribe band
+--------------------------------------------------------------------------- */
+.fms-subscribe {
+  background: var(--fms-brick-deep);
+  color: var(--fms-paper);
+  text-align: center;
+  padding: 52px 48px;
+}
+.fms-subscribe__script {
+  font-family: var(--fms-script);
+  font-size: 26px;
+  color: var(--fms-sepia-light);
+  display: block;
+}
+.fms-subscribe h3 {
+  font-size: 34px;
+  color: var(--fms-paper);
+  margin: 4px 0 14px;
+}
+.fms-subscribe p {
+  font-size: 16px;
+  color: var(--fms-sepia-pale);
+  max-width: 520px;
+  margin: 0 auto 26px;
+}
+.fms-subscribe .fms-btn {
+  background: var(--fms-paper);
+  color: var(--fms-brick-deep);
+  font-size: 14px;
+  padding: 15px 30px;
+}
+.fms-subscribe .fms-btn:hover { background: var(--fms-paper-warm); }
+
+/* ---------------------------------------------------------------------------
+   9. Footer
+--------------------------------------------------------------------------- */
+.fms-footer {
+  background: var(--fms-ink);
+  color: var(--fms-diamond);
+  padding: 34px 48px;
+  font-family: var(--fms-label);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+}
+.fms-footer__in {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.fms-footer a { color: var(--fms-sepia-light); text-decoration: none; margin-left: 22px; }
+.fms-footer a:first-child { margin-left: 0; }
+.fms-footer a:hover { color: var(--fms-paper); }
+
+/* ---------------------------------------------------------------------------
+   Video facade (shared with article pages)
+--------------------------------------------------------------------------- */
+.fms-video-box { position: relative; aspect-ratio: 16 / 9; background: var(--fms-ink); }
+.fms-video-box img, .fms-video-box iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0;
 }
 .fms-play {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(43,26,20,.18);
+  background: rgba(30,22,14,.18);
   border: 0; cursor: pointer; width: 100%;
 }
-.fms-play:hover { background: rgba(43,26,20,.05); }
+.fms-play:hover { background: rgba(30,22,14,.05); }
 .fms-play svg { width: 64px; height: 46px; filter: drop-shadow(0 2px 8px rgba(0,0,0,.4)); }
-.fms-card__body { padding: 1.1rem 1.25rem 1.35rem; }
-.fms-card__title { font-size: 1.25rem; margin: 0 0 .4rem; line-height: 1.35; }
-.fms-card__title a { text-decoration: none; color: var(--fms-umber); }
-.fms-card__title a:hover { color: var(--fms-brick); }
-.fms-card__meta { font-size: .95rem; color: #6d5a49; }
 
 /* ---------------------------------------------------------------------------
-   Recurring themes — 2x2 teasers, not a feature grid
---------------------------------------------------------------------------- */
-.fms-themes-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 3rem;
-  margin-top: 1rem;
-}
-.fms-theme {
-  padding: 1.75rem 0;
-  border-top: 1px solid var(--fms-line);
-}
-.fms-theme h3 { font-size: 1.45rem; margin: 0 0 .5rem; }
-.fms-theme h3 .fms-theme-no {
-  font-family: var(--fms-display);
-  font-style: italic;
-  color: var(--fms-brick);
-  margin-right: .6rem;
-}
-.fms-theme p { margin: 0; font-size: 1.05rem; }
-
-/* ---------------------------------------------------------------------------
-   Follow band + footer
---------------------------------------------------------------------------- */
-.fms-follow {
-  background: var(--fms-brick-deep);
-  color: var(--fms-cream);
-  text-align: center;
-}
-.fms-follow .fms-eyebrow { color: var(--fms-amber-soft); }
-.fms-about-teaser { text-align: center; }
-.fms-about-teaser p { font-size: 1.25rem; max-width: 40rem; margin: 0 auto 1rem; }
-.fms-more-link {
-  font-family: var(--fms-serif);
-  font-size: 1.05rem;
-  text-decoration: none;
-  border-bottom: 1px solid var(--fms-amber);
-  padding-bottom: .1rem;
-}
-.fms-follow .fms-section-title { color: var(--fms-cream); }
-.fms-follow-links {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 1rem; margin-top: 1.5rem; padding: 0; list-style: none;
-}
-.fms-follow-links a {
-  display: inline-block;
-  padding: .65rem 1.4rem;
-  border: 1px solid rgba(243,228,200,.45);
-  border-radius: 2px;
-  color: var(--fms-cream);
-  text-decoration: none;
-}
-.fms-follow-links a:hover { background: rgba(243,228,200,.12); color: #fff; }
-
-.fms-footer {
-  background: var(--fms-umber);
-  color: #cbb79b;
-  text-align: center;
-  padding: 2.25rem 1.5rem;
-  font-size: .95rem;
-}
-.fms-footer a { color: var(--fms-amber-soft); }
-
-/* ---------------------------------------------------------------------------
-   Single article — long-form reading, video up top
+   Article pages (single + about), restyled to the Broadsheet tokens
 --------------------------------------------------------------------------- */
 .fms-article-hero {
-  background: var(--fms-umber);
-  color: var(--fms-cream);
-  padding: 3.5rem 1.5rem 2.5rem;
+  background: var(--fms-ink);
+  color: var(--fms-paper);
+  padding: 56px 24px 44px;
   text-align: center;
 }
-.fms-article-hero .fms-eyebrow { color: var(--fms-amber-soft); }
+.fms-article-hero .fms-eyebrow { color: var(--fms-sepia-light); }
 .fms-article-hero h1 {
-  color: var(--fms-cream);
-  font-size: clamp(1.9rem, 4.5vw, 3rem);
-  max-width: 50rem;
-  margin: 0 auto .75rem;
+  color: var(--fms-paper);
+  font-size: clamp(30px, 4.5vw, 48px);
+  line-height: 1.05;
+  max-width: 800px;
+  margin: 0 auto 12px;
 }
-.fms-article-hero .fms-article-meta { color: #cbb79b; font-size: 1rem; }
-
+.fms-article-hero .fms-article-meta {
+  font-style: italic; color: var(--fms-diamond); font-size: 15px;
+}
 .fms-article-video {
-  max-width: 56rem;
-  margin: -1px auto 0;
-  padding: 0 1.5rem;
-  transform: translateY(2.5rem);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+  transform: translateY(40px);
 }
-.fms-article-video .fms-card__media {
-  box-shadow: 0 14px 40px rgba(43,26,20,.35);
-}
-.fms-article-body { padding-top: 5rem; }
-.fms-article-body p { margin: 0 0 1.4rem; }
-.fms-article-body h2 { font-size: 1.8rem; margin: 2.5rem 0 1rem; }
-.fms-article-body h3 { font-size: 1.4rem; margin: 2rem 0 .75rem; }
+.fms-article-video .fms-video-box { box-shadow: 0 14px 40px rgba(30,22,14,.35); }
+.fms-article-body { background: var(--fms-paper-mid); padding: 96px 24px 64px; }
+.fms-article-body .fms-wrap--narrow { max-width: 720px; margin: 0 auto; }
+.fms-article-body p { font-size: 18px; line-height: 1.7; margin: 0 0 24px; }
+.fms-article-body h2 { font-size: 30px; margin: 40px 0 16px; }
+.fms-article-body h3 { font-size: 23px; margin: 32px 0 12px; }
 .fms-article-body img { max-width: 100%; height: auto; }
 .fms-article-body blockquote {
-  border-left: 3px solid var(--fms-amber);
-  margin: 2rem 0;
-  padding: .25rem 0 .25rem 1.5rem;
+  border-left: 3px solid var(--fms-brick);
+  margin: 32px 0;
+  padding: 4px 0 4px 24px;
   font-style: italic;
-  color: #4a3a2c;
+  color: var(--fms-ink);
 }
+.fms-monogram {
+  width: 84px; height: 84px; border-radius: 50%; object-fit: cover;
+  display: block; margin: 0 auto 20px;
+  box-shadow: 0 4px 18px rgba(42,33,24,.25);
+}
+.fms-about { background: var(--fms-paper-mid); text-align: center; padding: 56px 24px; }
+.fms-about .fms-wrap--narrow { max-width: 720px; margin: 0 auto; }
+.fms-about p { font-size: 18px; line-height: 1.7; margin: 0 auto 20px; }
+.fms-about .fms-section-title { font-size: 34px; margin: 0 0 18px; }
 
 /* ---------------------------------------------------------------------------
    Responsive
 --------------------------------------------------------------------------- */
-@media (max-width: 760px) {
-  .fms-section { padding: 3.25rem 1.25rem; }
-  .fms-themes-list { grid-template-columns: 1fr; }
-  .fms-hero { min-height: 60vh; } /* shallower crop keeps the full sign band visible */
-  .fms-hero__img { object-position: 52% 38%; }
-  .fms-article-video { transform: translateY(1.75rem); padding: 0 1rem; }
-  .fms-article-body { padding-top: 3.5rem; }
+@media (max-width: 800px) {
+  .fms-band { padding: 40px 20px; }
+  .fms-topbar { padding: 16px 20px; }
+  .fms-topbar__in { justify-content: center; text-align: center; }
+  .fms-nav { justify-content: center; gap: 16px; }
+  .fms-masthead { letter-spacing: .18em; }
+  .fms-hero { height: auto; min-height: 480px; display: flex; align-items: flex-end; }
+  .fms-hero__text { position: relative; left: 0; bottom: 0; padding: 220px 20px 36px; }
+  .fms-hero__title { font-size: 42px; }
+  .fms-hero__dek { font-size: 17px; }
+  .fms-featured__grid, .fms-map__grid { grid-template-columns: 1fr; gap: 28px; }
+  .fms-cards { grid-template-columns: 1fr; }
+  .fms-themes__grid { grid-template-columns: 1fr; gap: 24px; }
+  .fms-still { height: 240px; }
+  .fms-map__surface { height: 280px; }
+  .fms-stats { gap: 24px; flex-wrap: wrap; }
+  .fms-featured__meta, .fms-map__submit { display: block; margin: 12px 0 0; }
+  .fms-footer__in { justify-content: center; text-align: center; }
 }

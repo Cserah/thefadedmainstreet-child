@@ -12,7 +12,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'blocksy-parent', get_template_directory_uri() . '/style.css', array(), null );
 	wp_enqueue_style(
 		'fms-fonts',
-		'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap',
+		'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Grand+Hotel&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Oswald:wght@300..600&display=swap',
 		array(),
 		null
 	);
@@ -71,14 +71,14 @@ function fms_youtube_facade( $video_id, $title, $eager = false ) {
 	if ( '' === $video_id ) { return; }
 	$thumb = sprintf( 'https://i.ytimg.com/vi/%s/hqdefault.jpg', $video_id );
 	?>
-	<div class="fms-card__media" data-fms-video="<?php echo esc_attr( $video_id ); ?>">
+	<div class="fms-video-box" data-fms-video="<?php echo esc_attr( $video_id ); ?>">
 		<img src="<?php echo esc_url( $thumb ); ?>"
 			alt="<?php echo esc_attr( $title ); ?>"
 			width="480" height="270"
 			<?php echo $eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'; ?> />
 		<button class="fms-play" type="button"
 			aria-label="<?php echo esc_attr( sprintf( __( 'Play video: %s', 'thefadedmainstreet-child' ), $title ) ); ?>">
-			<svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.5 7.7c-.8-2.9-3-5.1-5.9-5.9C55.5.4 34 .4 34 .4S12.5.4 7.4 1.8c-2.9.8-5.1 3-5.9 5.9C.1 12.8.1 24 .1 24s0 11.2 1.4 16.3c.8 2.9 3 5.1 5.9 5.9C12.5 47.6 34 47.6 34 47.6s21.5 0 26.6-1.4c2.9-.8 5.1-3 5.9-5.9C67.9 35.2 67.9 24 67.9 24s0-11.2-1.4-16.3z" fill="#7c2d1e" opacity=".92"/><path d="M27 34.6 44.6 24 27 13.4v21.2z" fill="#f3e4c8"/></svg>
+			<svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.5 7.7c-.8-2.9-3-5.1-5.9-5.9C55.5.4 34 .4 34 .4S12.5.4 7.4 1.8c-2.9.8-5.1 3-5.9 5.9C.1 12.8.1 24 .1 24s0 11.2 1.4 16.3c.8 2.9 3 5.1 5.9 5.9C12.5 47.6 34 47.6 34 47.6s21.5 0 26.6-1.4c2.9-.8 5.1-3 5.9-5.9C67.9 35.2 67.9 24 67.9 24s0-11.2-1.4-16.3z" fill="#8a2f22" opacity=".92"/><path d="M27 34.6 44.6 24 27 13.4v21.2z" fill="#f3ead9"/></svg>
 		</button>
 	</div>
 	<?php

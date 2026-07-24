@@ -28,19 +28,20 @@ get_header();
 		</div>
 	<?php endif; ?>
 
-	<article <?php post_class( 'fms-section fms-article-body' ); ?>>
+	<article <?php post_class( 'fms-article-body' ); ?>>
 		<div class="fms-wrap fms-wrap--narrow">
 			<?php the_content(); ?>
 		</div>
 	</article>
 
-	<section class="fms-section fms-follow">
-		<div class="fms-wrap fms-wrap--narrow" style="text-align:center;">
-			<span class="fms-eyebrow">Keep exploring</span>
-			<h2 class="fms-section-title">More stories of vanished America</h2>
-			<p><a class="fms-btn" href="<?php echo esc_url( home_url( '/' ) ); ?>">All episodes</a>
-			&nbsp; <a class="fms-btn fms-btn--solid" href="https://www.youtube.com/@thefadedmainstreet">Subscribe on YouTube</a></p>
-		</div>
+	<section class="fms-subscribe">
+		<span class="fms-subscribe__script">Keep exploring</span>
+		<h3>More stories of vanished America</h3>
+		<p>New documentaries most weeks. Join the crew tracking down what's left of Main Street.</p>
+		<p>
+			<a class="fms-btn" href="<?php echo esc_url( home_url( '/' ) ); ?>">All stories</a>
+			&nbsp; <a class="fms-btn" href="https://www.youtube.com/@thefadedmainstreet">&#9654;&nbsp; Subscribe on YouTube</a>
+		</p>
 	</section>
 
 <?php endwhile; ?>

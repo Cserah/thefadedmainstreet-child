@@ -21,7 +21,7 @@ $fms_assets = get_stylesheet_directory_uri() . '/assets';
 		<h1><?php the_title(); ?></h1>
 	</header>
 
-	<section class="fms-section fms-about">
+	<section class="fms-about">
 		<div class="fms-wrap fms-wrap--narrow">
 			<img class="fms-monogram"
 				src="<?php echo esc_url( $fms_assets . '/profile-icon.jpg' ); ?>"
@@ -36,7 +36,7 @@ $fms_assets = get_stylesheet_directory_uri() . '/assets';
 				</div>
 			<?php endif; ?>
 			<p style="margin-top:2rem;">
-				<a class="fms-btn fms-btn--solid" href="https://www.youtube.com/@thefadedmainstreet">Watch on YouTube</a>
+				<a class="fms-btn" href="https://www.youtube.com/@thefadedmainstreet">&#9654;&nbsp; Watch on YouTube</a>
 			</p>
 		</div>
 	</section>

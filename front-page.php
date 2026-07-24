@@ -1,134 +1,231 @@
 <?php
 /**
- * Homepage — Faded Main Street.
- * Hero (banner artwork) / about / latest videos / recurring themes / follow.
+ * Homepage — direction 1A "The Broadsheet".
+ * Bands: top bar -> masthead rule -> hero -> featured story -> recent stories ->
+ * recurring themes -> The Map -> subscribe band -> footer.
+ * Blocksy's own header/footer are hidden on this page via style.css.
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 get_header();
 
-$fms_assets = get_stylesheet_directory_uri() . '/assets';
+$fms_assets  = get_stylesheet_directory_uri() . '/assets';
+$fms_channel = 'https://www.youtube.com/@thefadedmainstreet';
+
+/* Featured story = newest post; recent = the next three. */
+$fms_q = new WP_Query( array(
+	'post_type'           => 'post',
+	'posts_per_page'      => 4,
+	'ignore_sticky_posts' => true,
+	'no_found_rows'       => true,
+) );
+$fms_posts    = $fms_q->posts;
+$fms_featured = array_shift( $fms_posts );
+
+$fms_story_count = (int) wp_count_posts()->publish;
+
+/** YouTube thumb for a post, or its featured image, or null. */
+function fms_post_still( $post_id ) {
+	$vid = get_post_meta( $post_id, 'fms_youtube_id', true );
+	if ( $vid ) {
+		return sprintf( 'https://i.ytimg.com/vi/%s/hqdefault.jpg', $vid );
+	}
+	return get_the_post_thumbnail_url( $post_id, 'large' ) ?: null;
+}
 ?>
 
 <main id="main" class="fms-home">
 
+	<div class="fms-topbar">
+		<div class="fms-topbar__in">
+			<a class="fms-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<span class="fms-logo__stamp" aria-hidden="true">FM</span>
+				<span>
+					<span class="fms-logo__name">Faded Main Street</span>
+					<span class="fms-logo__tag">Stories of Vanished America</span>
+				</span>
+			</a>
+			<nav class="fms-nav" aria-label="<?php esc_attr_e( 'Primary', 'thefadedmainstreet-child' ); ?>">
+				<a href="#stories">Stories</a>
+				<a href="#themes">Themes</a>
+				<a href="#map">The Map</a>
+				<a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+				<a class="fms-btn" href="<?php echo esc_url( $fms_channel ); ?>">Subscribe &#9656;</a>
+			</nav>
+		</div>
+	</div>
+
+	<div class="fms-masthead">
+		Vol. I <span class="d">&#9670;</span> Documented before it disappears <span class="d">&#9670;</span> Est. 2026
+	</div>
+
 	<section class="fms-hero">
 		<img class="fms-hero__img"
-			src="<?php echo esc_url( $fms_assets . '/channel-banner-safezone.jpg' ); ?>"
-			alt="A faded painted 'Faded Main Street' sign on an aged brick wall at golden hour"
-			width="2752" height="1536" fetchpriority="high" decoding="async" />
-		<div class="fms-hero__scrim" aria-hidden="true"></div>
-		<div class="fms-hero__inner">
-			<span class="fms-hero__kicker">Faded Main Street</span>
-			<h1 class="fms-hero__title">The stories of vanished America</h1>
-			<p class="fms-hero__tagline">Ghost signs, lost buildings, and forgotten places — documented before they disappear for good.</p>
-			<a class="fms-btn fms-btn--solid" href="https://www.youtube.com/@thefadedmainstreet">Watch on YouTube</a>
+			src="<?php echo esc_url( $fms_assets . '/hero-ghost-sign-neutral-21x9.jpg' ); ?>"
+			alt="A faded hand-painted flour advertisement on an aged brick wall at golden hour"
+			width="3168" height="1344" fetchpriority="high" decoding="async" />
+		<div class="fms-hero__grade" aria-hidden="true"></div>
+		<div class="fms-hero__tint" aria-hidden="true"></div>
+		<div class="fms-hero__text">
+			<span class="fms-hero__script">Faded Main Street</span>
+			<h2 class="fms-hero__title">The stories of vanished America</h2>
+			<p class="fms-hero__dek">Ghost signs, lost buildings, and forgotten places &mdash; filmed, researched, and written down before they're gone for good.</p>
+			<div class="fms-hero__btns">
+				<a class="fms-btn" href="<?php echo esc_url( $fms_channel ); ?>">&#9654;&nbsp; Watch the channel</a>
+				<a class="fms-btn fms-btn--ghost" href="#stories">Read the stories</a>
+			</div>
 		</div>
 	</section>
 
-	<section class="fms-section fms-about-teaser">
-		<div class="fms-wrap fms-wrap--narrow">
-			<img class="fms-monogram"
-				src="<?php echo esc_url( $fms_assets . '/profile-icon.jpg' ); ?>"
-				alt="Faded Main Street monogram — a cream script F painted on brick"
-				width="84" height="84" loading="lazy" decoding="async" />
-			<span class="fms-eyebrow">About the channel</span>
-			<p>Faded Main Street documents the America that's still visible if you know where to look — one sign, one building, one vanished name at a time.</p>
-			<a class="fms-more-link" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">Read more &rarr;</a>
-		</div>
-	</section>
-
-	<hr class="fms-rule" />
-
-	<section class="fms-section fms-videos">
+	<?php if ( $fms_featured ) :
+		$f_still = fms_post_still( $fms_featured->ID );
+		$f_cats  = get_the_category( $fms_featured->ID );
+		$f_kick  = $f_cats ? strtoupper( $f_cats[0]->name ) : 'THE STORY';
+	?>
+	<section class="fms-band fms-featured" id="stories">
 		<div class="fms-wrap">
-			<span class="fms-eyebrow">Latest episodes</span>
-			<h2 class="fms-section-title">Recent stories</h2>
+			<span class="fms-eyebrow">The Latest Story</span>
+			<div class="fms-featured__grid">
+				<a class="fms-still" href="<?php echo esc_url( get_permalink( $fms_featured ) ); ?>">
+					<?php if ( $f_still ) : ?>
+						<img src="<?php echo esc_url( $f_still ); ?>"
+							alt="<?php echo esc_attr( get_the_title( $fms_featured ) ); ?>"
+							width="960" height="540" loading="lazy" decoding="async" />
+					<?php endif; ?>
+					<span class="fms-still__shade" aria-hidden="true"></span>
+					<span class="fms-still__badge">&#9654; Video + Essay</span>
+					<span class="fms-still__play" aria-hidden="true">&#9654;</span>
+				</a>
+				<div>
+					<span class="fms-kicker"><?php echo esc_html( $f_kick ); ?></span>
+					<h3 class="fms-featured__title">
+						<a style="text-decoration:none;color:inherit;" href="<?php echo esc_url( get_permalink( $fms_featured ) ); ?>"><?php echo esc_html( get_the_title( $fms_featured ) ); ?></a>
+					</h3>
+					<p class="fms-featured__body"><?php echo esc_html( wp_trim_words( get_the_excerpt( $fms_featured ), 40 ) ); ?></p>
+					<p>
+						<a class="fms-btn" style="font-size:12px;" href="<?php echo esc_url( get_permalink( $fms_featured ) ); ?>">Watch &amp; read &#9656;</a>
+						<span class="fms-featured__meta">Published <?php echo esc_html( get_the_date( 'M Y', $fms_featured ) ); ?></span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<?php endif; ?>
 
-			<?php
-			$fms_q = new WP_Query( array(
-				'post_type'           => 'post',
-				'posts_per_page'      => 6,
-				'ignore_sticky_posts' => true,
-				'no_found_rows'       => true,
-			) );
-			if ( $fms_q->have_posts() ) : ?>
-				<div class="fms-video-grid">
-					<?php while ( $fms_q->have_posts() ) : $fms_q->the_post();
-						$vid = get_post_meta( get_the_ID(), 'fms_youtube_id', true ); ?>
-						<article class="fms-card">
-							<?php if ( $vid ) {
-								fms_youtube_facade( $vid, get_the_title() );
-							} elseif ( has_post_thumbnail() ) { ?>
-								<div class="fms-card__media">
-									<?php the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy', 'decoding' => 'async' ) ); ?>
-								</div>
-							<?php } ?>
-							<div class="fms-card__body">
-								<h3 class="fms-card__title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-								<p class="fms-card__meta"><?php echo esc_html( get_the_date() ); ?></p>
-							</div>
-						</article>
-					<?php endwhile; wp_reset_postdata(); ?>
+	<section class="fms-band fms-recent">
+		<div class="fms-wrap">
+			<div class="fms-recent__head">
+				<h3>Recent stories</h3>
+				<a class="fms-archive-link" href="<?php echo esc_url( $fms_channel ); ?>">The Full Archive &rarr;</a>
+			</div>
+			<?php if ( $fms_posts ) : ?>
+				<div class="fms-cards">
+					<?php foreach ( $fms_posts as $p ) :
+						$still = fms_post_still( $p->ID );
+						$cats  = get_the_category( $p->ID );
+						$kick  = $cats ? strtoupper( $cats[0]->name ) : 'STORY'; ?>
+						<a class="fms-card" href="<?php echo esc_url( get_permalink( $p ) ); ?>">
+							<span class="fms-card__media">
+								<?php if ( $still ) : ?>
+									<img src="<?php echo esc_url( $still ); ?>"
+										alt="<?php echo esc_attr( get_the_title( $p ) ); ?>"
+										width="480" height="270" loading="lazy" decoding="async" />
+								<?php endif; ?>
+								<?php if ( get_post_meta( $p->ID, 'fms_youtube_id', true ) ) : ?>
+									<span class="fms-card__chip">&#9654; Video</span>
+								<?php endif; ?>
+							</span>
+							<span class="fms-card__kicker"><?php echo esc_html( $kick ); ?></span>
+							<h4><?php echo esc_html( get_the_title( $p ) ); ?></h4>
+							<p><?php echo esc_html( wp_trim_words( get_the_excerpt( $p ), 22 ) ); ?></p>
+						</a>
+					<?php endforeach; ?>
 				</div>
 			<?php else : ?>
-				<p>New episodes are on the way. In the meantime, the full archive lives on
-					<a href="https://www.youtube.com/@thefadedmainstreet">the Faded Main Street YouTube channel</a>.</p>
+				<p>New stories are on the way. In the meantime, the full archive lives on
+					<a href="<?php echo esc_url( $fms_channel ); ?>">the Faded Main Street YouTube channel</a>.</p>
 			<?php endif; ?>
 		</div>
 	</section>
 
-	<section class="fms-section">
+	<section class="fms-band fms-themes" id="themes">
 		<div class="fms-wrap">
-			<span class="fms-eyebrow">Recurring themes</span>
-			<h2 class="fms-section-title">What we keep coming back to</h2>
-			<div class="fms-themes-list">
+			<span class="fms-eyebrow">Recurring Themes</span>
+			<h3>What we keep coming back to</h3>
+			<div class="fms-themes__grid">
 				<div class="fms-theme">
-					<h3><span class="fms-theme-no">i.</span>Ghost signs</h3>
-					<p>Hand-painted brick advertisements, faded to a whisper — the last billboards of businesses gone eighty years.</p>
+					<span class="fms-theme__no">i.</span>
+					<h4>Ghost signs</h4>
+					<p>Hand-painted brick advertisements faded to a whisper &mdash; the last billboards of businesses gone eighty years.</p>
 				</div>
 				<div class="fms-theme">
-					<h3><span class="fms-theme-no">ii.</span>Lost buildings</h3>
-					<p>Opera houses, depots, and department stores that anchored a town — and what stands (or doesn't) in their place.</p>
+					<span class="fms-theme__no">ii.</span>
+					<h4>Lost buildings</h4>
+					<p>Opera houses, depots, and department stores that anchored a town &mdash; and what stands in their place.</p>
 				</div>
 				<div class="fms-theme">
-					<h3><span class="fms-theme-no">iii.</span>Dead products</h3>
-					<p>The brands in every pantry and toolbox of their day, and how a household name becomes a trivia answer.</p>
+					<span class="fms-theme__no">iii.</span>
+					<h4>Forgotten brands</h4>
+					<p>The names in every pantry and toolbox of their day, and how a household word becomes a trivia answer.</p>
 				</div>
 				<div class="fms-theme">
-					<h3><span class="fms-theme-no">iv.</span>Wall dogs</h3>
-					<p>The itinerant painters who lettered America's walls by hand — the craft behind every ghost sign we film.</p>
+					<span class="fms-theme__no">iv.</span>
+					<h4>Roadside relics</h4>
+					<p>Motels, diners, and filling stations the interstate passed by &mdash; still standing, barely.</p>
 				</div>
 			</div>
 		</div>
 	</section>
 
-	<section class="fms-section fms-follow">
-		<div class="fms-wrap fms-wrap--narrow">
-			<span class="fms-eyebrow">Follow along</span>
-			<h2 class="fms-section-title">Follow the stories</h2>
-			<p>New documentaries on YouTube &mdash; photo stories on Pinterest and beyond.</p>
-			<ul class="fms-follow-links">
-				<li><a href="https://www.youtube.com/@thefadedmainstreet">YouTube</a></li>
-				<?php /* Uncomment as each profile goes live — keep in sync with the
-				         sameAs placeholders in functions.php.
-				<li><a href="https://www.pinterest.com/…">Pinterest</a></li>
-				<li><a href="https://medium.com/@…">Medium</a></li>
-				<li><a href="https://x.com/…">X</a></li>
-				<li><a href="https://www.facebook.com/…">Facebook</a></li>
-				<li><a href="https://www.instagram.com/…">Instagram</a></li>
-				<li><a href="https://www.tumblr.com/…">Tumblr</a></li>
-				*/ ?>
-			</ul>
+	<section class="fms-band fms-map" id="map">
+		<div class="fms-wrap">
+			<div class="fms-map__grid">
+				<div class="fms-map__surface" role="img"
+					aria-label="<?php esc_attr_e( 'Map of documented places across the United States', 'thefadedmainstreet-child' ); ?>">
+					<span class="fms-pin" style="top:34%;left:62%;"></span>
+					<span class="fms-pin" style="top:52%;left:44%;"></span>
+					<span class="fms-pin" style="top:64%;left:70%;"></span>
+					<span class="fms-pin" style="top:42%;left:26%;"></span>
+					<span class="fms-pin fms-pin--sm" style="top:70%;left:36%;"></span>
+					<span class="fms-pin fms-pin--sm" style="top:26%;left:50%;"></span>
+				</div>
+				<div>
+					<span class="fms-eyebrow">The Map</span>
+					<h3 class="fms-map__title">Every place we've documented</h3>
+					<p class="fms-map__body">Each story starts with a place. The map keeps track of every town, sign, and building we've filmed &mdash; and where we're headed next.</p>
+					<div class="fms-stats">
+						<div class="fms-stat"><b><?php echo esc_html( max( 1, $fms_story_count ) ); ?></b><span><?php echo esc_html( _n( 'Story', 'Stories', max( 1, $fms_story_count ), 'thefadedmainstreet-child' ) ); ?></span></div>
+						<div class="fms-stat"><b>4</b><span>Themes</span></div>
+					</div>
+					<p>
+						<a class="fms-btn" href="<?php echo esc_url( $fms_channel ); ?>">Explore the map &#9656;</a>
+						<a class="fms-map__submit" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">Know a place? Submit a location &rarr;</a>
+					</p>
+				</div>
+			</div>
 		</div>
 	</section>
 
-	<div class="fms-footer">
-		<p>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Faded Main Street &middot;
-			<a href="https://www.youtube.com/@thefadedmainstreet">YouTube</a> &middot;
-			The stories of vanished America.</p>
-	</div>
+	<section class="fms-subscribe">
+		<span class="fms-subscribe__script">Never miss a street</span>
+		<h3>Subscribe on YouTube</h3>
+		<p>New documentaries most weeks. Join the crew tracking down what's left of Main Street.</p>
+		<a class="fms-btn" href="<?php echo esc_url( $fms_channel ); ?>">&#9654;&nbsp; Subscribe on YouTube</a>
+	</section>
+
+	<footer class="fms-footer">
+		<div class="fms-footer__in">
+			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Faded Main Street</span>
+			<span>
+				<a href="<?php echo esc_url( $fms_channel ); ?>">YouTube</a>
+				<?php /* Uncomment as each goes live:
+				<a href="https://www.pinterest.com/…">Pinterest</a>
+				<a href="#">Newsletter</a>
+				*/ ?>
+			</span>
+		</div>
+	</footer>
 
 </main>
 
