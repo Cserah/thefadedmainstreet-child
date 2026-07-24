@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.2.1
+Version:      1.2.2
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -529,8 +529,18 @@ a.fms-still:hover img { transform: scale(1.03); }
 .fms-article-body h2 { font-size: 30px; margin: 40px 0 16px; color: var(--fms-ink); }
 .fms-article-body h3 { font-size: 23px; margin: 32px 0 12px; color: var(--fms-ink); }
 .fms-article-body h4 { color: var(--fms-ink); }
-.fms-article-body a { color: var(--fms-brick); }
-.fms-article-body a:hover { color: var(--fms-brick-hover); }
+.fms-article-body a {
+  color: var(--fms-brick);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(138, 47, 34, .38);
+  transition: color .25s ease, text-decoration-color .25s ease;
+}
+.fms-article-body a:hover {
+  color: var(--fms-brick-hover);
+  text-decoration-color: var(--fms-brick-hover);
+}
 .fms-article-body img { max-width: 100%; height: auto; }
 .fms-article-body blockquote {
   border-left: 3px solid var(--fms-brick);
@@ -557,6 +567,22 @@ a.fms-still:hover img { transform: scale(1.03); }
    breaks them.
 --------------------------------------------------------------------------- */
 .fms-article-body .ia-wrap { max-width: none; margin: 0; padding: 0; font-family: inherit; font-size: inherit; color: inherit; }
+/* Each H2 section is its own full-bleed band, alternating through three paper
+   tones so the reader can see where one segment ends and the next begins —
+   the same banding the homepage uses. Release the 720px wrapper for these
+   posts only; ordinary posts keep the narrow column. */
+.fms-article-body:has(.ia-wrap) { padding: 0; }
+.fms-article-body .fms-wrap--narrow:has(.ia-wrap) { max-width: none; }
+.ia-sec { padding: 34px 24px 38px; border-bottom: 1px solid var(--fms-rule); }
+.ia-secin { max-width: 720px; margin: 0 auto; }
+.ia-sec:nth-of-type(3n+1) { background: var(--fms-paper); }
+.ia-sec:nth-of-type(3n+2) { background: var(--fms-paper-mid); }
+.ia-sec:nth-of-type(3n+3) { background: var(--fms-paper-warm); }
+.ia-sec--intro { padding-top: 26px; }
+.fms-article-body .ia-sec > .ia-secin > h2:first-child { margin-top: 0; }
+@supports not (selector(:has(*))) {
+  .ia-sec { padding-left: 0; padding-right: 0; }
+}
 .ia-kicker {
   font-family: var(--fms-label);
   font-size: 11px; font-weight: 500; text-transform: uppercase;
