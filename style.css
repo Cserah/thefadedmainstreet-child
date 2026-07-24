@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.2.2
+Version:      1.2.3
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -28,6 +28,14 @@ Text Domain:  thefadedmainstreet-child
   --fms-rule: #cbb98f;
   --fms-diamond: #c9b892;
   --fms-map-surface: #ded0b0;
+  /* Article section bands — spaced ~9 steps apart so consecutive segments are
+     distinguishable while reading. --fms-paper/-mid are only 4 apart, which
+     reads as one continuous sheet. */
+  --fms-band-a: #f5efe3;
+  --fms-band-b: #ece2cd;
+  --fms-band-c: #e3d7bd;
+  /* Card surface that lifts off any of the three bands. */
+  --fms-surface: rgba(255, 252, 245, .68);
   --fms-display: "DM Serif Display", Georgia, serif;
   --fms-serif: "Newsreader", Georgia, serif;
   --fms-label: "Oswald", Arial, sans-serif;
@@ -511,6 +519,8 @@ a.fms-still:hover img { transform: scale(1.03); }
   font-style: italic; color: var(--fms-sepia); font-size: 15px;
   max-width: 720px; margin: 0 auto;
 }
+.fms-article-hero a { color: var(--fms-brick); text-decoration: none; }
+.fms-article-hero a:hover { color: var(--fms-brick-hover); text-decoration: underline; }
 .fms-article-video {
   max-width: 900px;
   margin: 0 auto;
@@ -575,9 +585,9 @@ a.fms-still:hover img { transform: scale(1.03); }
 .fms-article-body .fms-wrap--narrow:has(.ia-wrap) { max-width: none; }
 .ia-sec { padding: 34px 24px 38px; border-bottom: 1px solid var(--fms-rule); }
 .ia-secin { max-width: 720px; margin: 0 auto; }
-.ia-sec:nth-of-type(3n+1) { background: var(--fms-paper); }
-.ia-sec:nth-of-type(3n+2) { background: var(--fms-paper-mid); }
-.ia-sec:nth-of-type(3n+3) { background: var(--fms-paper-warm); }
+.ia-sec:nth-of-type(3n+1) { background: var(--fms-band-a); }
+.ia-sec:nth-of-type(3n+2) { background: var(--fms-band-b); }
+.ia-sec:nth-of-type(3n+3) { background: var(--fms-band-c); }
 .ia-sec--intro { padding-top: 26px; }
 .fms-article-body .ia-sec > .ia-secin > h2:first-child { margin-top: 0; }
 @supports not (selector(:has(*))) {
@@ -601,7 +611,7 @@ a.fms-still:hover img { transform: scale(1.03); }
 .ia-punchline {
   font-family: var(--fms-serif);
   font-size: 21px; line-height: 1.5; font-weight: 500;
-  color: var(--fms-ink); background: var(--fms-paper);
+  color: var(--fms-ink); background: var(--fms-surface);
   border-left: 4px solid var(--fms-brick);
   padding: 20px 24px; margin: 0 0 28px; border-radius: 0 6px 6px 0;
 }
@@ -617,7 +627,7 @@ a.fms-still:hover img { transform: scale(1.03); }
 .fms-article-body .ia-takeaways a { color: var(--fms-sepia-light); }
 .fms-article-body .ia-takeaways a:hover { color: var(--fms-paper); }
 .ia-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin: 28px 0; }
-.ia-stat-card { background: var(--fms-paper); border: 1px solid var(--fms-rule); border-radius: 8px; padding: 18px 20px; }
+.ia-stat-card { background: var(--fms-surface); border: 1px solid var(--fms-rule); border-radius: 8px; padding: 18px 20px; }
 .ia-stat-card b {
   display: block; font-family: var(--fms-display);
   font-size: 30px; line-height: 1.05; color: var(--fms-brick); margin-bottom: 7px;
@@ -626,7 +636,7 @@ a.fms-still:hover img { transform: scale(1.03); }
 .ia-method-table { border-collapse: collapse; width: 100%; margin: 28px 0; font-family: var(--fms-label); font-weight: 300; font-size: 14px; }
 .ia-method-table th { background: var(--fms-ink); color: var(--fms-paper); text-align: left; padding: 11px 13px; font-weight: 500; }
 .ia-method-table td { border: 1px solid var(--fms-rule); padding: 10px 13px; vertical-align: top; color: var(--fms-body); }
-.ia-method-table tr:nth-child(even) td { background: var(--fms-paper); }
+.ia-method-table tr:nth-child(even) td { background: var(--fms-surface); }
 .ia-svgbox { background: var(--fms-ink); padding: 26px 22px; border-radius: 10px; margin: 28px 0; }
 .ia-svgbox svg { width: 100%; height: auto; display: block; }
 .fms-article-body .ia-figcap {
@@ -637,13 +647,13 @@ a.fms-still:hover img { transform: scale(1.03); }
 .fms-article-body figure { margin: 28px 0; }
 .fms-article-body figure img { border-radius: 8px; display: block; }
 .ia-note {
-  background: var(--fms-paper); border: 1px solid var(--fms-rule);
+  background: var(--fms-surface); border: 1px solid var(--fms-rule);
   border-radius: 8px; padding: 18px 22px; margin: 32px 0;
 }
 .fms-article-body .ia-note { font-size: 15px; line-height: 1.65; color: var(--fms-body); }
 .ia-faq details {
   border: 1px solid var(--fms-rule); border-radius: 8px;
-  margin: 10px 0; padding: 0 18px; background: var(--fms-paper);
+  margin: 10px 0; padding: 0 18px; background: var(--fms-surface);
 }
 .ia-faq summary {
   cursor: pointer; padding: 15px 0; color: var(--fms-ink);
@@ -660,7 +670,7 @@ a.fms-still:hover img { transform: scale(1.03); }
 .fms-article-body .ia-cta a:hover { color: var(--fms-paper); }
 .ia-author-box {
   display: flex; gap: 18px; align-items: flex-start;
-  background: var(--fms-paper); border: 1px solid var(--fms-rule);
+  background: var(--fms-surface); border: 1px solid var(--fms-rule);
   border-radius: 10px; padding: 20px 22px; margin: 36px 0 0;
 }
 .fms-article-body .ia-author-box img { width: 64px; height: 64px; border-radius: 50%; flex: none; object-fit: cover; }
