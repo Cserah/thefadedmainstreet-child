@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.2.8
+Version:      1.2.9
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -617,6 +617,11 @@ a.fms-still:hover img { transform: scale(1.03); }
 }
 .fms-inline-video { margin: 0 0 30px; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(30,22,14,.28); }
 .fms-inline-video .fms-video-box { border-radius: 10px; }
+/* `.fms-article-body img { height: auto }` sits later in this file and has the
+   same specificity as `.fms-video-box img`, so inside article copy the facade
+   thumbnail lost its height:100% and overflowed the 16:9 box as a 4:3 image.
+   Scope it to win. */
+.fms-article-body .fms-video-box img { width: 100%; height: 100%; object-fit: cover; }
 .ia-takeaways { background: var(--fms-ink); border-radius: 10px; padding: 24px 28px; margin: 0 0 32px; }
 .fms-article-body .ia-takeaways h3 {
   font-family: var(--fms-label);
