@@ -145,6 +145,34 @@ add_action( 'wp', function () {
 	}
 } );
 
+/**
+ * Article JSON-LD lives in post meta, emitted here in wp_head.
+ *
+ * It used to sit inline in post content, but a <script> tag in the request
+ * body trips the WAF in front of this site: the block editor's save POST is
+ * blocked before it reaches the origin and Gutenberg reports "Could not get a
+ * valid response from the server", making the post uneditable. Keeping the
+ * schema out of post_content keeps the editor usable — and wp_head is where
+ * structured data belongs anyway.
+ *
+ * The stored value is decoded and re-encoded rather than printed raw, so a
+ * malformed or hostile value can't break out of the <script> element.
+ */
+add_action( 'wp_head', function () {
+	if ( ! is_singular( 'post' ) ) {
+		return;
+	}
+	$raw = get_post_meta( get_the_ID(), 'fms_schema_jsonld', true );
+	if ( ! $raw ) {
+		return;
+	}
+	$data = json_decode( $raw, true );
+	if ( ! is_array( $data ) ) {
+		return;
+	}
+	echo "\n" . '<script type="application/ld+json">' . wp_json_encode( $data ) . '</script>' . "\n";
+}, 20 );
+
 /* ---------------------------------------------------------------------------
    Shared Broadsheet bands (top bar / masthead / footer), used by the
    homepage and About templates.
