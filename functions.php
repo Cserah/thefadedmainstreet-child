@@ -104,6 +104,22 @@ function fms_youtube_facade( $video_id, $title, $eager = false ) {
 	<?php
 }
 
+/**
+ * [fms_video id="rRCcy8VZa4Y" title="…"] — the same lazy facade, placeable
+ * anywhere inside post content. single.php renders the episode video above the
+ * article body from the fms_youtube_id meta; this is for articles that want it
+ * at a specific point in the copy instead.
+ */
+add_shortcode( 'fms_video', function ( $atts ) {
+	$a = shortcode_atts( array( 'id' => '', 'title' => '' ), $atts, 'fms_video' );
+	if ( '' === $a['id'] ) {
+		return '';
+	}
+	ob_start();
+	fms_youtube_facade( $a['id'], $a['title'] ? $a['title'] : get_the_title() );
+	return '<div class="fms-inline-video">' . ob_get_clean() . '</div>';
+} );
+
 /** One tiny inline script powers every facade on the page. */
 add_action( 'wp_footer', function () {
 	?>
