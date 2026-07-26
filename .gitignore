@@ -1,3 +1,7 @@
 .claude/
 Thumbs.db
 .DS_Store
+__pycache__/
+*.ttf
+base_*.png
+thumbnail*.png

@@ -105,19 +105,43 @@ function fms_youtube_facade( $video_id, $title, $eager = false ) {
 }
 
 /**
- * [fms_video id="rRCcy8VZa4Y" title="…"] — the same lazy facade, placeable
- * anywhere inside post content. single.php renders the episode video above the
- * article body from the fms_youtube_id meta; this is for articles that want it
- * at a specific point in the copy instead.
+ * [fms_video id="…" title="…" label="Watch the episode" caption="…"] — the lazy
+ * facade, placeable anywhere inside post content. single.php renders the episode
+ * video above the article body from the fms_youtube_id meta; this is for
+ * articles that want it at a specific point in the copy instead.
+ *
+ * With a label or caption the facade is wrapped in a framed card, so a reader
+ * scanning the page reads it as a video rather than another photograph. Without
+ * either it falls back to the plain inline treatment.
  */
 add_shortcode( 'fms_video', function ( $atts ) {
-	$a = shortcode_atts( array( 'id' => '', 'title' => '' ), $atts, 'fms_video' );
+	$a = shortcode_atts(
+		array( 'id' => '', 'title' => '', 'label' => '', 'caption' => '' ),
+		$atts,
+		'fms_video'
+	);
 	if ( '' === $a['id'] ) {
 		return '';
 	}
 	ob_start();
 	fms_youtube_facade( $a['id'], $a['title'] ? $a['title'] : get_the_title() );
-	return '<div class="fms-inline-video">' . ob_get_clean() . '</div>';
+	$facade = ob_get_clean();
+
+	if ( '' === $a['label'] && '' === $a['caption'] ) {
+		return '<div class="fms-inline-video">' . $facade . '</div>';
+	}
+
+	$out = '<div class="fms-videocard">';
+	if ( '' !== $a['label'] ) {
+		$out .= '<p class="fms-videocard__bar">'
+			. '<span class="fms-videocard__play" aria-hidden="true">&#9654;</span>'
+			. '<span>' . esc_html( $a['label'] ) . '</span></p>';
+	}
+	$out .= '<div class="fms-videocard__frame">' . $facade . '</div>';
+	if ( '' !== $a['caption'] ) {
+		$out .= '<p class="fms-videocard__cap">' . esc_html( $a['caption'] ) . '</p>';
+	}
+	return $out . '</div>';
 } );
 
 /** One tiny inline script powers every facade on the page. */
