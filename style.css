@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.3.1
+Version:      1.3.2
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -56,8 +56,23 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--fms-ink);
 }
 
-a { color: var(--fms-brick); transition: color .3s ease; }
-a:hover { color: var(--fms-brick-hover); }
+/* `body a`, not `a`: Blocksy prints its own `a {}` rule inline in wp_head after
+   this stylesheet, so a bare element selector ties on specificity and loses on
+   order — links then render in Blocksy blue. This matches the article link
+   treatment site-wide. Chrome links (nav, buttons, cards, footer) opt out of
+   the underline at class specificity, so they are unaffected. */
+body a {
+  color: var(--fms-brick);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(138, 47, 34, .38);
+  transition: color .25s ease, text-decoration-color .25s ease;
+}
+body a:hover {
+  color: var(--fms-brick-hover);
+  text-decoration-color: var(--fms-brick-hover);
+}
 
 /* Blocksy's own header/footer are replaced by the template's top bar and
    footer on the homepage only. */
@@ -321,7 +336,12 @@ a.fms-still:hover img { transform: scale(1.03); }
   gap: 28px;
 }
 .fms-card { text-decoration: none; display: block; }
+/* This is a <span>. Without an explicit display it stays inline, height:190px
+   is ignored, the card's box collapses, and the title and excerpt spill out of
+   the band into the section below. .fms-card itself escapes this only because
+   it is a grid item and gets blockified. */
 .fms-card__media {
+  display: block;
   position: relative; height: 190px; background: var(--fms-ink); overflow: hidden;
   margin-bottom: 14px;
 }
