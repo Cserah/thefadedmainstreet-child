@@ -54,9 +54,24 @@ add_filter( 'wp_resource_hints', function ( $urls, $relation ) {
 }, 10, 2 );
 
 /**
+ * Stable @id for the publisher entity. Article nodes reference this instead of
+ * repeating an inline publisher, so crawlers merge the two into one
+ * Organization rather than treating "Faded Main Street" and "The Faded Main
+ * Street" as separate entities. Derived from home_url() so it follows the site
+ * rather than hardcoding a host.
+ */
+function fms_org_id() {
+	return home_url( '/' ) . '#organization';
+}
+
+/**
  * Organization JSON-LD in <head>.
  * sameAs: YouTube is live now; the rest are placeholders — uncomment each line
  * below as the profile goes live.
+ *
+ * The em dash in the description is written as a \u{2014} escape in a
+ * double-quoted string rather than a literal character, so the value cannot be
+ * corrupted by an editor or tool that mishandles the file's encoding.
  */
 add_action( 'wp_head', function () {
 	$same_as = array(
@@ -68,13 +83,19 @@ add_action( 'wp_head', function () {
 		// 'https://www.instagram.com/…',   // Instagram — fill in when live
 		// 'https://www.tumblr.com/…',      // Tumblr — fill in when live
 	);
+	$logo   = get_stylesheet_directory_uri() . '/assets/profile-icon.jpg';
 	$schema = array(
 		'@context'    => 'https://schema.org',
 		'@type'       => 'Organization',
+		'@id'         => fms_org_id(),
 		'name'        => 'Faded Main Street',
-		'url'         => 'https://thefadedmainstreet.com',
-		'logo'        => get_stylesheet_directory_uri() . '/assets/profile-icon.jpg',
-		'description' => 'Faded Main Street is a documentary YouTube channel about vanished America — ghost signs, lost buildings, and forgotten places, told one story at a time.',
+		'url'         => home_url( '/' ),
+		'logo'        => array(
+			'@type' => 'ImageObject',
+			'url'   => $logo,
+		),
+		'image'       => $logo,
+		'description' => "Faded Main Street is a documentary YouTube channel about vanished America \u{2014} ghost signs, lost buildings, and forgotten places, told one story at a time.",
 		'sameAs'      => array_values( $same_as ),
 	);
 	echo '<script type="application/ld+json">' .
@@ -197,6 +218,12 @@ add_action( 'wp', function () {
  *
  * The stored value is decoded and re-encoded rather than printed raw, so a
  * malformed or hostile value can't break out of the <script> element.
+ *
+ * Anything WordPress already knows is overridden from live data on every
+ * render, because a hand-authored blob drifts the moment a post is edited or
+ * its publish date moves: the dates and the publisher were both wrong within a
+ * day of publishing. Only the fields WordPress cannot derive — headline,
+ * description, author, the FAQ entities — come from the stored value.
  */
 add_action( 'wp_head', function () {
 	if ( ! is_singular( 'post' ) ) {
@@ -210,6 +237,35 @@ add_action( 'wp_head', function () {
 	if ( ! is_array( $data ) ) {
 		return;
 	}
+
+	$graph = isset( $data['@graph'] ) && is_array( $data['@graph'] )
+		? $data['@graph']
+		: array( $data );
+
+	foreach ( $graph as &$node ) {
+		if ( ! is_array( $node ) || empty( $node['@type'] ) ) {
+			continue;
+		}
+		$types = (array) $node['@type'];
+		if ( ! array_intersect( $types, array( 'Article', 'BlogPosting', 'NewsArticle' ) ) ) {
+			continue;
+		}
+		// Live post data wins over whatever was baked into the meta.
+		$node['datePublished']    = get_the_date( 'c' );
+		$node['dateModified']     = get_the_modified_date( 'c' );
+		$node['mainEntityOfPage'] = get_permalink();
+		// One publisher entity, referenced by @id, so this and the sitewide
+		// Organization block below merge instead of competing.
+		$node['publisher']        = array( '@id' => fms_org_id() );
+	}
+	unset( $node );
+
+	if ( isset( $data['@graph'] ) ) {
+		$data['@graph'] = $graph;
+	} else {
+		$data = $graph[0];
+	}
+
 	echo "\n" . '<script type="application/ld+json">' . wp_json_encode( $data ) . '</script>' . "\n";
 }, 20 );
 
