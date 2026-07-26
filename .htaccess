@@ -1,0 +1,6 @@
+# The theme directory is web-served. Nothing here should hand out source for
+# local tooling: deploy.py in particular carries the origin host, SSH user and
+# key path. Deny anything that is not a normal theme asset.
+<FilesMatch "\.(py|sh|json|lock|md|yml|yaml|ini|log|bak|sql)$">
+  Require all denied
+</FilesMatch>

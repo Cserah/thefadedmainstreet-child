@@ -5,3 +5,7 @@ __pycache__/
 *.ttf
 base_*.png
 thumbnail*.png
+
+# Local tooling — must never ship inside the web-served theme directory
+*.py
+!deploy.py
