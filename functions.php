@@ -238,6 +238,32 @@ add_action( 'wp', function () {
 } );
 
 /**
+ * The YouTube ID for a post, read from the same places the facade reads it:
+ * the fms_youtube_id meta that single.php renders from, falling back to the id
+ * attribute of the [fms_video] shortcode in post content. Deliberately not a
+ * hardcoded map — if the facade shows a video, the schema describes that same
+ * video, and the two cannot drift apart.
+ *
+ * Returns '' when the post has no video, which is the signal not to emit a
+ * VideoObject at all rather than an empty one.
+ */
+function fms_post_video_id( $post = null ) {
+	$post = get_post( $post );
+	if ( ! $post ) {
+		return '';
+	}
+	$id = (string) get_post_meta( $post->ID, 'fms_youtube_id', true );
+	if ( '' === $id && has_shortcode( $post->post_content, 'fms_video' ) ) {
+		$pattern = get_shortcode_regex( array( 'fms_video' ) );
+		if ( preg_match( '/' . $pattern . '/s', $post->post_content, $m ) ) {
+			$atts = shortcode_parse_atts( $m[3] );
+			$id   = isset( $atts['id'] ) ? (string) $atts['id'] : '';
+		}
+	}
+	return preg_replace( '/[^A-Za-z0-9_-]/', '', $id );
+}
+
+/**
  * Article JSON-LD lives in post meta, emitted here in wp_head.
  *
  * It used to sit inline in post content, but a <script> tag in the request
@@ -273,6 +299,20 @@ add_action( 'wp_head', function () {
 		? $data['@graph']
 		: array( $data );
 
+	// The facade injects its iframe with JS, so there is no <iframe> in the
+	// served HTML for a crawler to find. Without this node nothing on the page
+	// indicates the article has a video at all. Built only when the post
+	// actually has one; posts without a video get no VideoObject.
+	$video_id   = fms_post_video_id();
+	$video_meta = json_decode( (string) get_post_meta( get_the_ID(), 'fms_video_data', true ), true );
+	$video_ref  = '';
+	if ( '' !== $video_id && is_array( $video_meta ) ) {
+		$video_ref = get_permalink() . '#video';
+		// maxresdefault does not exist for every upload; the working variant is
+		// resolved once at publish time and stored, never guessed at render.
+		$variant = ! empty( $video_meta['thumbnail'] ) ? $video_meta['thumbnail'] : 'hqdefault';
+	}
+
 	foreach ( $graph as &$node ) {
 		if ( ! is_array( $node ) || empty( $node['@type'] ) ) {
 			continue;
@@ -288,8 +328,25 @@ add_action( 'wp_head', function () {
 		// One publisher entity, referenced by @id, so this and the sitewide
 		// Organization block below merge instead of competing.
 		$node['publisher']        = array( '@id' => fms_org_id() );
+		if ( '' !== $video_ref ) {
+			$node['video'] = array( '@id' => $video_ref );
+		}
 	}
 	unset( $node );
+
+	if ( '' !== $video_ref ) {
+		$graph[] = array(
+			'@type'        => 'VideoObject',
+			'@id'          => $video_ref,
+			'name'         => $video_meta['name'],
+			'description'  => $video_meta['description'],
+			'uploadDate'   => $video_meta['uploadDate'],
+			'duration'     => $video_meta['duration'],
+			'thumbnailUrl' => sprintf( 'https://i.ytimg.com/vi/%s/%s.jpg', $video_id, $variant ),
+			'embedUrl'     => 'https://www.youtube-nocookie.com/embed/' . $video_id,
+			'contentUrl'   => 'https://www.youtube.com/watch?v=' . $video_id,
+		);
+	}
 
 	if ( isset( $data['@graph'] ) ) {
 		$data['@graph'] = $graph;
