@@ -264,6 +264,42 @@ function fms_post_video_id( $post = null ) {
 }
 
 /**
+ * ImageObject for the Article node — url plus real pixel dimensions, never a
+ * bare string, because Google uses width/height for article rich presentation
+ * and Discover eligibility.
+ *
+ * Order: the post's featured image at full size, then whatever Rank Math is
+ * already using for og:image. Dimensions are read from the attachment, never
+ * assumed. If nothing resolves to a real attachment with real dimensions this
+ * returns null and the caller emits no image property at all — an image node
+ * without width/height is worse than none.
+ */
+function fms_post_image_object( $post_id = null ) {
+	$post_id = $post_id ? $post_id : get_the_ID();
+
+	$ids = array( get_post_thumbnail_id( $post_id ) );
+	// Rank Math's social image, used as the og:image fallback.
+	$ids[] = get_post_meta( $post_id, 'rank_math_facebook_image_id', true );
+	$og_url = (string) get_post_meta( $post_id, 'rank_math_facebook_image', true );
+	if ( '' !== $og_url ) {
+		$ids[] = attachment_url_to_postid( $og_url );
+	}
+
+	foreach ( array_filter( $ids ) as $id ) {
+		$src = wp_get_attachment_image_src( (int) $id, 'full' );
+		if ( $src && ! empty( $src[0] ) && ! empty( $src[1] ) && ! empty( $src[2] ) ) {
+			return array(
+				'@type'  => 'ImageObject',
+				'url'    => $src[0],
+				'width'  => (int) $src[1],
+				'height' => (int) $src[2],
+			);
+		}
+	}
+	return null;
+}
+
+/**
  * Article JSON-LD lives in post meta, emitted here in wp_head.
  *
  * It used to sit inline in post content, but a <script> tag in the request
@@ -330,6 +366,10 @@ add_action( 'wp_head', function () {
 		$node['publisher']        = array( '@id' => fms_org_id() );
 		if ( '' !== $video_ref ) {
 			$node['video'] = array( '@id' => $video_ref );
+		}
+		$image = fms_post_image_object();
+		if ( $image ) {
+			$node['image'] = $image;
 		}
 	}
 	unset( $node );
