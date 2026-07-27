@@ -36,6 +36,37 @@ add_action( 'wp_enqueue_scripts', function () {
 	);
 } );
 
+/** Google Analytics 4 measurement ID. Declared once; never inline the literal. */
+define( 'FMS_GA4_ID', 'G-85J8WJF86K' );
+
+/**
+ * Google Analytics 4.
+ *
+ * Priority 1 so the tag lands as early in <head> as possible, ahead of the
+ * favicon (4), Organization JSON-LD (5) and Article JSON-LD (20) hooks.
+ *
+ * Skipped for logged-in users who can edit posts. The site currently has
+ * near-zero traffic, so the author's own admin sessions would otherwise
+ * dominate the numbers. Note this deliberately still tracks logged-in
+ * subscribers, should any ever exist — only editors and above are excluded.
+ */
+add_action( 'wp_head', function () {
+	if ( is_user_logged_in() && current_user_can( 'edit_posts' ) ) {
+		return;
+	}
+	$id = FMS_GA4_ID;
+	?>
+<!-- Google tag (gtag.js) -->
+<script async src="<?php echo esc_url( 'https://www.googletagmanager.com/gtag/js?id=' . $id ); ?>"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '<?php echo esc_js( $id ); ?>');
+</script>
+	<?php
+}, 1 );
+
 /** Favicon set (generated from the F monogram). */
 add_action( 'wp_head', function () {
 	$a = get_stylesheet_directory_uri() . '/assets';
