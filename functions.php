@@ -503,18 +503,30 @@ add_action( 'wp_enqueue_scripts', function () {
 	 * Core block CSS. global-styles alone is ~23KB of render-blocking inline
 	 * CSS in <head>. The articles are hand-authored ia-* markup with zero block
 	 * comments, and neither the child theme nor Blocksy references a
-	 * --wp--preset-* variable. Gated on the post actually containing blocks so
-	 * the Privacy Policy page (which is block-built) keeps its styling.
+	 * --wp--preset-* variable.
+	 *
+	 * wp_enqueue_global_styles is a plain function hooked at priority 10, and
+	 * dequeuing the 'global-styles' handle afterwards does not suppress it on
+	 * WP 7 - the action has to be removed. That is done from template_redirect,
+	 * which runs after the main query is known but before wp_enqueue_scripts,
+	 * so the decision can still be per-post.
 	 */
-	if ( ! is_singular() ) {
+}, 100 );
+
+add_action( 'template_redirect', function () {
+	if ( is_admin() || ! is_singular() ) {
 		return;
 	}
 	$post = get_post();
+	// The Privacy Policy page is block-built and must keep its styling.
 	if ( ! $post || false !== strpos( $post->post_content, '<!-- wp:' ) ) {
 		return;
 	}
-	wp_dequeue_style( 'wp-block-library' );
-	wp_dequeue_style( 'wp-block-library-theme' );
-	wp_dequeue_style( 'classic-theme-styles' );
-	wp_dequeue_style( 'global-styles' );
-}, 100 );
+	remove_action( 'wp_enqueue_scripts', 'wp_enqueue_global_styles' );
+	remove_action( 'wp_footer', 'wp_enqueue_global_styles', 1 );
+	add_action( 'wp_enqueue_scripts', function () {
+		wp_dequeue_style( 'wp-block-library' );
+		wp_dequeue_style( 'wp-block-library-theme' );
+		wp_dequeue_style( 'classic-theme-styles' );
+	}, 100 );
+} );
