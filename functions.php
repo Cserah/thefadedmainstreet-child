@@ -200,7 +200,7 @@ add_shortcode( 'fms_video', function ( $atts ) {
 		$a['label'] = __( 'Watch the episode', 'thefadedmainstreet-child' );
 	}
 	if ( '' === $a['caption'] ) {
-		$a['caption'] = __( 'Press play - the full film runs right here, no need to leave the page.', 'thefadedmainstreet-child' );
+		$a['caption'] = __( 'Press play — the full film runs right here, no need to leave the page.', 'thefadedmainstreet-child' );
 	}
 
 	$out = '<div class="fms-videocard">';
