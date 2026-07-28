@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.5.1
+Version:      1.6.0
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -520,8 +520,39 @@ a.fms-still:hover img { transform: scale(1.03); }
   background: rgba(30,22,14,.18);
   border: 0; cursor: pointer; width: 100%;
 }
-.fms-play:hover { background: rgba(30,22,14,.05); }
-.fms-play svg { width: 64px; height: 46px; filter: drop-shadow(0 2px 8px rgba(0,0,0,.4)); }
+.fms-play:hover { background: rgba(30,22,14,.28); }
+.fms-play svg {
+  width: 88px; height: 62px;
+  filter: drop-shadow(0 3px 12px rgba(0,0,0,.55));
+  transition: transform .18s ease;
+}
+.fms-play:hover svg, .fms-play:focus-visible svg { transform: scale(1.09); }
+.fms-play:focus-visible { outline: 3px solid var(--fms-sepia-light); outline-offset: -3px; }
+
+/* Bottom scrim + "Watch" badge. Together with the larger play button these are
+   what stop the facade reading as a still photograph. Pointer-events off so the
+   button underneath still receives the click. */
+.fms-video-box__scrim {
+  position: absolute; inset: auto 0 0 0; height: 42%;
+  background: linear-gradient(to top, rgba(20,14,9,.72), rgba(20,14,9,0));
+  pointer-events: none;
+}
+.fms-video-box__badge {
+  position: absolute; left: 14px; bottom: 12px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 11px 4px;
+  border-radius: 999px;
+  background: var(--fms-brick);
+  color: var(--fms-paper);
+  font-family: var(--fms-label); font-weight: 500;
+  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  pointer-events: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,.35);
+}
+@media (max-width: 600px) {
+  .fms-play svg { width: 66px; height: 47px; }
+  .fms-video-box__badge { left: 10px; bottom: 9px; font-size: 10px; padding: 4px 9px 3px; }
+}
 
 /* ---------------------------------------------------------------------------
    Article pages (single + about), restyled to the Broadsheet tokens
@@ -553,10 +584,10 @@ a.fms-still:hover img { transform: scale(1.03); }
   padding: 0 24px;
   transform: translateY(40px);
 }
-.fms-article-video .fms-video-box { box-shadow: 0 14px 40px rgba(30,22,14,.35); }
+.fms-article-video .fms-videocard { box-shadow: 0 16px 44px rgba(30,22,14,.38); }
 .fms-article-body { background: var(--fms-paper-mid); padding: 20px 24px 64px; }
 /* Video posts keep the overlap gap; text-only posts sit tight under the title. */
-.fms-article-video + .fms-article-body { padding-top: 96px; }
+.fms-article-video + .fms-article-body { padding-top: 128px; }
 .fms-article-body .fms-wrap--narrow { max-width: 720px; margin: 0 auto; }
 .fms-article-body p { font-size: 18px; line-height: 1.7; margin: 0 0 24px; }
 /* Blocksy prints its own `h2 {}` / `a {}` rules inline in wp_head, after this
@@ -678,6 +709,27 @@ a.fms-still:hover img { transform: scale(1.03); }
 @media (max-width: 600px) {
   .fms-videocard { padding: 11px 11px 8px; }
   .fms-article-body .fms-videocard__bar { font-size: 11px; letter-spacing: .16em; }
+}
+/* Hero video card. The bar/caption rules above are scoped to
+   .fms-article-body, and the hero video sits outside it, so repeat them here. */
+.fms-videocard--hero { margin: 0; }
+.fms-videocard--hero .fms-videocard__bar {
+  display: flex; align-items: center; gap: 11px;
+  margin: 3px 4px 12px;
+  font-family: var(--fms-label);
+  font-size: 12px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .2em;
+  color: var(--fms-sepia-light);
+}
+.fms-videocard--hero .fms-videocard__cap {
+  margin: 11px 4px 3px;
+  font-family: var(--fms-label); font-weight: 300;
+  font-size: 13px; line-height: 1.5;
+  color: var(--fms-diamond);
+}
+@media (max-width: 600px) {
+  .fms-videocard--hero .fms-videocard__bar { font-size: 11px; letter-spacing: .16em; }
+  .fms-videocard--hero .fms-videocard__cap { font-size: 12px; }
 }
 .fms-inline-video { margin: 0 0 30px; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(30,22,14,.28); }
 .fms-inline-video .fms-video-box { border-radius: 10px; }

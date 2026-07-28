@@ -27,7 +27,21 @@ get_header();
 
 	<?php if ( $vid ) : ?>
 		<div class="fms-article-video">
-			<?php fms_youtube_facade( $vid, get_the_title(), true ); ?>
+			<?php /* The bare facade read as a photograph. Wrapping it in the same
+			         labelled card the [fms_video] shortcode uses makes it obvious
+			         this is something to play. */ ?>
+			<div class="fms-videocard fms-videocard--hero">
+				<p class="fms-videocard__bar">
+					<span class="fms-videocard__play" aria-hidden="true">&#9654;</span>
+					<span><?php esc_html_e( 'Watch the episode', 'thefadedmainstreet-child' ); ?></span>
+				</p>
+				<div class="fms-videocard__frame">
+					<?php fms_youtube_facade( $vid, get_the_title(), true ); ?>
+				</div>
+				<p class="fms-videocard__cap">
+					<?php esc_html_e( 'See these walls in motion — the full film plays right here, no need to leave the page.', 'thefadedmainstreet-child' ); ?>
+				</p>
+			</div>
 		</div>
 	<?php endif; ?>
 
