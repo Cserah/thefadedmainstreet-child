@@ -24,7 +24,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'blocksy-parent', get_template_directory_uri() . '/style.css', array(), null );
 	wp_enqueue_style(
 		'fms-fonts',
-		'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Grand+Hotel&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Oswald:wght@300..600&display=swap',
+		'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Grand+Hotel&family=Newsreader:wght@400;500&family=Oswald:wght@300..600&display=swap',
 		array(),
 		null
 	);
@@ -477,3 +477,44 @@ add_action( 'init', function () {
 		'sanitize_callback' => function ( $v ) { return preg_replace( '/[^A-Za-z0-9_-]/', '', $v ); },
 	) );
 } );
+
+/**
+ * Render-blocking cleanup. Measured with Lighthouse against
+ * /coca-cola-ghost-signs/: FCP 4.1s, LCP 6.3s of which 5,876ms was render
+ * delay. Nothing here changes a pixel; each item is dead weight verified as
+ * unused on this site.
+ */
+add_action( 'wp_enqueue_scripts', function () {
+	if ( is_admin() ) {
+		return;
+	}
+
+	/*
+	 * Comments. single.php never calls comments_template(), so no form is ever
+	 * rendered - confirmed by grepping the served HTML for comment-respond and
+	 * commentform (both zero). Blocksy still ships comments.min.css as a
+	 * render-blocking request and core still queues comment-reply.
+	 */
+	wp_dequeue_style( 'ct-comments-styles' );
+	wp_deregister_style( 'ct-comments-styles' );
+	wp_dequeue_script( 'comment-reply' );
+
+	/*
+	 * Core block CSS. global-styles alone is ~23KB of render-blocking inline
+	 * CSS in <head>. The articles are hand-authored ia-* markup with zero block
+	 * comments, and neither the child theme nor Blocksy references a
+	 * --wp--preset-* variable. Gated on the post actually containing blocks so
+	 * the Privacy Policy page (which is block-built) keeps its styling.
+	 */
+	if ( ! is_singular() ) {
+		return;
+	}
+	$post = get_post();
+	if ( ! $post || false !== strpos( $post->post_content, '<!-- wp:' ) ) {
+		return;
+	}
+	wp_dequeue_style( 'wp-block-library' );
+	wp_dequeue_style( 'wp-block-library-theme' );
+	wp_dequeue_style( 'classic-theme-styles' );
+	wp_dequeue_style( 'global-styles' );
+}, 100 );

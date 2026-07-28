@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.4.0
+Version:      1.5.0
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -22,7 +22,7 @@ Text Domain:  thefadedmainstreet-child
   --fms-brick: #8a2f22;
   --fms-brick-deep: #6d241a;
   --fms-brick-hover: #b0472f;
-  --fms-sepia: #9c7a4f;
+  --fms-sepia: #7b613f;   /* was #9c7a4f - failed WCAG AA (3.07-3.45) as body text on paper */
   --fms-sepia-light: #e6b98a;
   --fms-sepia-pale: #e7cbb8;
   --fms-rule: #cbb98f;
@@ -687,6 +687,7 @@ a.fms-still:hover img { transform: scale(1.03); }
    Scope it to win. */
 .fms-article-body .fms-video-box img { width: 100%; height: 100%; object-fit: cover; }
 .ia-takeaways { background: var(--fms-block); border-radius: 10px; padding: 24px 28px; margin: 0 0 32px; }
+.fms-article-body .ia-takeaways h2,
 .fms-article-body .ia-takeaways h3 {
   font-family: var(--fms-label);
   font-size: 13px; font-weight: 500; text-transform: uppercase;
