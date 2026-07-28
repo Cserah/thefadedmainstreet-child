@@ -23,15 +23,9 @@ foreach ( array( 'stylesheet_directory_uri', 'template_directory_uri', 'styleshe
 add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'blocksy-parent', get_template_directory_uri() . '/style.css', array(), null );
 	wp_enqueue_style(
-		'fms-fonts',
-		'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Grand+Hotel&family=Newsreader:wght@400;500&family=Oswald:wght@300..600&display=swap',
-		array(),
-		null
-	);
-	wp_enqueue_style(
 		'fms-child',
 		get_stylesheet_uri(),
-		array( 'blocksy-parent', 'fms-fonts' ),
+		array( 'blocksy-parent' ),
 		FMS_VERSION
 	);
 } );
@@ -78,8 +72,6 @@ add_action( 'wp_head', function () {
 /** Preconnect for the font CDN (Core Web Vitals). */
 add_filter( 'wp_resource_hints', function ( $urls, $relation ) {
 	if ( 'preconnect' === $relation ) {
-		$urls[] = 'https://fonts.googleapis.com';
-		$urls[] = array( 'href' => 'https://fonts.gstatic.com', 'crossorigin' => 'anonymous' );
 	}
 	return $urls;
 }, 10, 2 );
@@ -550,3 +542,25 @@ add_action( 'template_redirect', function () {
 		wp_dequeue_style( 'classic-theme-styles' );
 	}, 100 );
 } );
+
+/**
+ * Self-hosted webfonts, inlined.
+ *
+ * The Google Fonts stylesheet was a render-blocking request to a third-party
+ * origin. Across 8 Lighthouse runs it produced a bimodal result - FCP ~1.95s
+ * when the connection was warm, ~3.5s when it was cold, swinging the score
+ * between 87-90 and 54-68. Self-hosting removes the DNS+TLS handshake from the
+ * critical path entirely. Same families, weights, styles, unicode-ranges and
+ * font-display:swap, so nothing changes visually.
+ */
+add_action( 'wp_head', function () {
+	$css = get_stylesheet_directory() . '/assets/fonts/fonts.css';
+	if ( ! is_readable( $css ) ) {
+		return;
+	}
+	$out = file_get_contents( $css );
+	// rewrite the relative ../fonts/ paths to real theme URIs
+	$out = str_replace( "url('../fonts/", "url('" . get_stylesheet_directory_uri() . '/assets/fonts/', $out );
+	echo "<style id=\"fms-fonts-inline\">" . $out . "</style>
+";
+}, 2 );
