@@ -187,8 +187,20 @@ add_shortcode( 'fms_video', function ( $atts ) {
 	fms_youtube_facade( $a['id'], $a['title'] ? $a['title'] : get_the_title() );
 	$facade = ob_get_clean();
 
-	if ( '' === $a['label'] && '' === $a['caption'] ) {
+	/*
+	 * A video with no label used to fall through to a bare thumbnail, which
+	 * scanned as another photograph - the whole reason the card exists. Default
+	 * the label and caption instead, so a video is never presented as an image.
+	 * Pass label="none" to opt out deliberately.
+	 */
+	if ( 'none' === $a['label'] ) {
 		return '<div class="fms-inline-video">' . $facade . '</div>';
+	}
+	if ( '' === $a['label'] ) {
+		$a['label'] = __( 'Watch the episode', 'thefadedmainstreet-child' );
+	}
+	if ( '' === $a['caption'] ) {
+		$a['caption'] = __( 'Press play - the full film runs right here, no need to leave the page.', 'thefadedmainstreet-child' );
 	}
 
 	$out = '<div class="fms-videocard">';
