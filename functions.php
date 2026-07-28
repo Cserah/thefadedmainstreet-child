@@ -158,7 +158,7 @@ function fms_youtube_facade( $video_id, $title, $eager = false ) {
 		<span class="fms-video-box__badge" aria-hidden="true">Watch</span>
 		<button class="fms-play" type="button"
 			aria-label="<?php echo esc_attr( sprintf( __( 'Play video: %s', 'thefadedmainstreet-child' ), $title ) ); ?>">
-			<svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.5 7.7c-.8-2.9-3-5.1-5.9-5.9C55.5.4 34 .4 34 .4S12.5.4 7.4 1.8c-2.9.8-5.1 3-5.9 5.9C.1 12.8.1 24 .1 24s0 11.2 1.4 16.3c.8 2.9 3 5.1 5.9 5.9C12.5 47.6 34 47.6 34 47.6s21.5 0 26.6-1.4c2.9-.8 5.1-3 5.9-5.9C67.9 35.2 67.9 24 67.9 24s0-11.2-1.4-16.3z" fill="#8a2f22" opacity=".92"/><path d="M27 34.6 44.6 24 27 13.4v21.2z" fill="#f3ead9"/></svg>
+			<svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.5 7.7c-.8-2.9-3-5.1-5.9-5.9C55.5.4 34 .4 34 .4S12.5.4 7.4 1.8c-2.9.8-5.1 3-5.9 5.9C.1 12.8.1 24 .1 24s0 11.2 1.4 16.3c.8 2.9 3 5.1 5.9 5.9C12.5 47.6 34 47.6 34 47.6s21.5 0 26.6-1.4c2.9-.8 5.1-3 5.9-5.9C67.9 35.2 67.9 24 67.9 24s0-11.2-1.4-16.3z" fill="#cf4229"/><path d="M27 34.6 44.6 24 27 13.4v21.2z" fill="#f3ead9"/></svg>
 		</button>
 	</div>
 	<?php

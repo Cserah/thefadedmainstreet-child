@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.6.2
+Version:      1.6.3
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -34,6 +34,10 @@ Text Domain:  thefadedmainstreet-child
   --fms-block: #18274b;
   --fms-block-card: #22345e;
   --fms-block-line: #546a99;
+  /* Bright red for video affordances only (play glyph, Watch pill). Brighter
+     than --fms-brick so the facade reads as playable; paired with white text,
+     which keeps the pill at 4.70:1. Paper text would fail at 3.94. */
+  --fms-play-red: #cf4229;
   /* Article section bands — spaced ~9 steps apart so consecutive segments are
      distinguishable while reading. --fms-paper/-mid are only 4 apart, which
      reads as one continuous sheet. */
@@ -542,8 +546,8 @@ a.fms-still:hover img { transform: scale(1.03); }
   display: inline-flex; align-items: center; gap: 7px;
   padding: 5px 11px 4px;
   border-radius: 999px;
-  background: var(--fms-brick);
-  color: var(--fms-paper);
+  background: var(--fms-play-red);
+  color: #fff;
   font-family: var(--fms-label); font-weight: 500;
   font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
   pointer-events: none;
@@ -695,8 +699,8 @@ a.fms-still:hover img { transform: scale(1.03); }
   display: inline-flex; align-items: center; justify-content: center;
   width: 30px; height: 20px; flex: none;
   border-radius: 4px;
-  background: var(--fms-brick);
-  color: var(--fms-paper);
+  background: var(--fms-play-red);
+  color: #fff;
   font-size: 10px; line-height: 1;
 }
 .fms-videocard__frame { border-radius: 8px; overflow: hidden; }
