@@ -5,7 +5,7 @@ Description:  Blocksy child theme for Faded Main Street — direction 1A "The Br
 Author:       Faded Main Street
 Author URI:   https://www.youtube.com/@thefadedmainstreet
 Template:     blocksy
-Version:      1.3.6
+Version:      1.4.0
 Text Domain:  thefadedmainstreet-child
 */
 
@@ -28,6 +28,12 @@ Text Domain:  thefadedmainstreet-child
   --fms-rule: #cbb98f;
   --fms-diamond: #c9b892;
   --fms-map-surface: #ded0b0;
+  /* Dark article block surfaces. Deliberately NOT --fms-ink: that token is
+     also the body/heading text colour, so repointing it would turn every
+     heading navy. */
+  --fms-block: #18274b;
+  --fms-block-card: #22345e;
+  --fms-block-line: #546a99;
   /* Article section bands — spaced ~9 steps apart so consecutive segments are
      distinguishable while reading. --fms-paper/-mid are only 4 apart, which
      reads as one continuous sheet. */
@@ -639,7 +645,7 @@ a.fms-still:hover img { transform: scale(1.03); }
    a video rather than another photograph. The <p> children need a class-scoped
    selector to beat `.fms-article-body p`. */
 .fms-videocard {
-  background: var(--fms-ink);
+  background: var(--fms-block);
   border: 1px solid rgba(230, 185, 138, .28);
   border-radius: 12px;
   padding: 14px 14px 10px;
@@ -680,7 +686,7 @@ a.fms-still:hover img { transform: scale(1.03); }
    thumbnail lost its height:100% and overflowed the 16:9 box as a 4:3 image.
    Scope it to win. */
 .fms-article-body .fms-video-box img { width: 100%; height: 100%; object-fit: cover; }
-.ia-takeaways { background: var(--fms-ink); border-radius: 10px; padding: 24px 28px; margin: 0 0 32px; }
+.ia-takeaways { background: var(--fms-block); border-radius: 10px; padding: 24px 28px; margin: 0 0 32px; }
 .fms-article-body .ia-takeaways h3 {
   font-family: var(--fms-label);
   font-size: 13px; font-weight: 500; text-transform: uppercase;
@@ -699,10 +705,10 @@ a.fms-still:hover img { transform: scale(1.03); }
 }
 .ia-stat-card span { font-family: var(--fms-label); font-weight: 300; font-size: 13px; line-height: 1.5; color: var(--fms-body); display: block; }
 .ia-method-table { border-collapse: collapse; width: 100%; margin: 28px 0; font-family: var(--fms-label); font-weight: 300; font-size: 14px; }
-.ia-method-table th { background: var(--fms-ink); color: var(--fms-paper); text-align: left; padding: 11px 13px; font-weight: 500; }
+.ia-method-table th { background: var(--fms-block); color: var(--fms-paper); text-align: left; padding: 11px 13px; font-weight: 500; }
 .ia-method-table td { border: 1px solid var(--fms-rule); padding: 10px 13px; vertical-align: top; color: var(--fms-body); }
 .ia-method-table tr:nth-child(even) td { background: var(--fms-surface); }
-.ia-svgbox { background: var(--fms-ink); padding: 26px 22px; border-radius: 10px; margin: 28px 0; }
+.ia-svgbox { background: var(--fms-block); padding: 26px 22px; border-radius: 10px; margin: 28px 0; }
 .ia-svgbox svg { width: 100%; height: auto; display: block; }
 .fms-article-body .ia-figcap {
   font-family: var(--fms-label); font-weight: 300;
@@ -725,7 +731,7 @@ a.fms-still:hover img { transform: scale(1.03); }
   font-family: var(--fms-label); font-weight: 500; font-size: 15px;
 }
 .fms-article-body .ia-faq p { padding-bottom: 16px; margin: 0; font-size: 16px; }
-.ia-cta { background: var(--fms-ink); border-radius: 10px; padding: 28px; margin: 36px 0; text-align: center; }
+.ia-cta { background: var(--fms-block); border-radius: 10px; padding: 28px; margin: 36px 0; text-align: center; }
 .fms-article-body .ia-cta h3 {
   font-family: var(--fms-display); color: var(--fms-sepia-light);
   margin: 0 0 10px; font-size: 24px;
