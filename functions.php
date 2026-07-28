@@ -559,6 +559,9 @@ add_action( 'wp_head', function () {
 		return;
 	}
 	$out = file_get_contents( $css );
+	// strip the source comment and collapse whitespace - this ships on every page
+	$out = preg_replace( '#/\*.*?\*/#s', '', $out );
+	$out = trim( preg_replace( '/\s+/', ' ', $out ) );
 	// rewrite the relative ../fonts/ paths to real theme URIs
 	$out = str_replace( "url('../fonts/", "url('" . get_stylesheet_directory_uri() . '/assets/fonts/', $out );
 	echo "<style id=\"fms-fonts-inline\">" . $out . "</style>
